@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 3.7.2)
+project(City CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+#   set(SFML_STATIC_LIBRARIES TRUE)
+#find_package(SFML 2 COMPONENTS graphics window system REQUIRED)
+find_package(SFGUI REQUIRED)
+
+file(GLOB_RECURSE CPPS city/*.cpp)
+add_executable(City ${CPPS})
+target_include_directories(City PRIVATE includes)
+target_link_libraries(City PRIVATE SFGUI::SFGUI stdc++fs)
