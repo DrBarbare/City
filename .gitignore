@@ -1,0 +1,9 @@
+*build*/
+*Build*/
+
+**.o
+**.a
+**.so
+
+**/CMakeCache.txt
+**/CMakeFiles/
