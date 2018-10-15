@@ -1,9 +1,6 @@
 #include "Game.h"
 #include "game_states/Start.h"
 
-#include <iostream>
-
-
 namespace city
 {
 
