@@ -58,11 +58,17 @@ Window::poll_events(EventListener* listener)
 	return;
 }
 
-Window::Window()
+Window::Window() :
+	m_dt_s{0}
 {
 	m_window.create(sf::VideoMode(1200, 1080), "City");
 	m_window.setFramerateLimit(30);
 	m_background.setTexture(AssetsManager::load(assets::Textures::background));
+	m_font.loadFromFile("/usr/share/fonts/TTF/DejaVuSans.ttf");
+	m_fps.setFont(m_font);
+	m_fps.setCharacterSize(20); // in pixels, not points!
+	m_fps.setFillColor(sf::Color::Red);
+	m_fps.setStyle(sf::Text::Bold);
 }
 
 float
@@ -79,9 +85,12 @@ Window::display(const std::function<void()>& draw)
 	// TODO: push clear as a limiter?
 	m_window.clear(sf::Color::Black);
 	m_window.resetGLStates();
+	m_desktop.RemoveAll();
 
 	//m_window.pushGLStates();
 	m_window.draw(m_background);
+	m_fps.setString(std::to_string(1.0 / dt_s()));
+	m_window.draw(m_fps);
 	//m_window.popGLStates();
 
 	// Draw UI element

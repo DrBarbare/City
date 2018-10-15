@@ -13,6 +13,7 @@ class Game
 {
 	// Options
 	Window m_window;
+	// TODO Switch to queue
 	std::stack<std::unique_ptr<GameState> > m_states;
 
 public:
@@ -23,6 +24,7 @@ public:
 
 	void back_to_previous_state();
 
+	decltype(auto) current_state() const;
 	template<typename T, typename... Args>
 	void switch_to_state(Args&&... args)
 	{

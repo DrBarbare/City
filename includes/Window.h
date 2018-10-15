@@ -18,6 +18,8 @@ class Window
 	float m_dt_s;
 
 	sf::Sprite m_background;
+	sf::Font m_font;
+	sf::Text m_fps;
 
 	sfg::SFGUI m_ui;
 	sfg::Desktop m_desktop;
