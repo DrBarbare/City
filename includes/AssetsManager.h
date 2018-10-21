@@ -29,6 +29,7 @@ public:
 	~AssetsManager() = delete;
 
 	static sf::Texture& load(assets::Textures texture);
+	static void loadTiles();
 };
 
 }

@@ -1,4 +1,7 @@
+#include <iostream>
+#include <yaml-cpp/yaml.h>
 #include "AssetsManager.h"
+
 
 namespace city
 {
@@ -23,6 +26,43 @@ AssetsManager::load(assets::Textures texture)
 		t.loadFromFile(m_textures_paths.at(texture).string());
 		return t;
 	}
+}
+
+void
+printKeys(const YAML::Node& node, int indent)
+{
+	switch (node.Type()) {
+		case YAML::NodeType::Sequence:
+			std::cout << "-- Seq --" << std::endl;
+			for (auto it = node.begin(); it != node.end(); ++it) {
+				auto element = *it;
+				printKeys(element, indent);
+				// recurse on "element"
+			}
+			break;
+		case YAML::NodeType::Map:
+			for (auto it = node.begin(); it != node.end(); ++it) {
+				auto key = it->first;
+				auto value = it->second;
+				for (auto i = 0; i < indent; ++i)
+				{
+					std::cout << "\t";
+				}
+				std::cout << key << std::endl;
+				printKeys(value, indent + 1);
+				// recurse on "key" and "value"
+				// if you're sure that "key" is a string, just grab it here
+			}
+			break;
+		default: break;
+	}
+}
+
+void
+AssetsManager::loadTiles()
+{
+	auto nodes = YAML::LoadFile("assets/tiles/tiles.yaml");
+	printKeys(nodes, 0);
 }
 
 }
