@@ -1,8 +1,31 @@
 #include <iostream>
-#include <sstream>
-#include <yaml-cpp/yaml.h>
-#include "AssetsManager.h"
 
+#include <yaml-cpp/yaml.h>
+
+#include "AssetsManager.h"
+#include "SpriteSheet.h"
+
+namespace YAML
+{
+template<>
+struct convert<sf::IntRect>
+{
+static bool decode(const Node& node, sf::IntRect& rhs)
+{
+	if(!node.IsSequence() || node.size() != 4) {
+		return false;
+	}
+	else
+	{
+		rhs = sf::Rect{node[0].as<int>(),
+		               node[1].as<int>(),
+		               node[2].as<int>(),
+		               node[3].as<int>()};
+		return true;
+	}
+}
+};
+}
 
 namespace city
 {
@@ -29,14 +52,42 @@ AssetsManager::load(assets::Textures texture)
 	}
 }
 
+std::unordered_map<std::string_view, Tile>
+AssetsManager::m_tiles;
+
 void
-fillTile(const YAML::Node& node, Tile& tile)
+fillTileProperties(const YAML::Node& node, Tile& tile)
 {
-	for (const auto& config_prop : node)
+	if (node.IsSequence())
 	{
-		auto prop = Tile::propertyFromName(config_prop.first.as<std::string>());
-		auto val  = config_prop.second.as<std::size_t>();
-		tile.property(prop, val);
+		// TODO: Handle levels
+	}
+	else
+	{
+		for (const auto& config_prop : node)
+		{
+			auto prop = Tile::propertyFromName(config_prop.first.as<std::string>());
+			auto val  = config_prop.second.as<std::size_t>();
+			tile.property(prop, val);
+		}
+	}
+}
+
+void
+loadTileAnimation(const std::string_view& name, const YAML::Node& node, Tile& tile)
+{
+	if (node && node.IsMap())
+	{
+	std::cout << "Getting animations" << std::endl;
+	auto file = (std::filesystem::path("assets/tiles") / name).replace_extension(".png");
+	SpriteSheet sheet(file, node["frame_shape"].as<sf::IntRect>());
+	
+	for (const auto row : node["rows"])
+	{
+		sheet.add_animation(row["offset"].as<std::size_t>(),
+		                    row["frames"].as<std::size_t>(),
+		                    row["duration"].as<double>());
+	}
 	}
 }
 
@@ -50,17 +101,9 @@ createTiles(const YAML::Node& node)
 		auto p = tiles.emplace(std::move(name), Tile{});
 		if (p.second)
 		{
-			auto props = element.second;
-			if (props.IsSequence())
-			{
-				// TODO: Handle levels
-				std::cerr << name << " has levels\n";
-				// Tile has levels
-			}
-			else
-			{
-				fillTile(props, p.first->second);
-			}
+			auto& tile = p.first->second;
+			fillTileProperties(element.second["properties"], p.first->second);
+			loadTileAnimation(name, element.second["animations"], p.first->second);
 		}
 		else
 		{
@@ -74,8 +117,8 @@ void
 AssetsManager::loadTiles()
 {
 	auto nodes = YAML::LoadFile("assets/tiles/tiles.yaml");
-	auto tiles = createTiles(nodes);
-	std::cerr << "7 tiles Loaded: " << tiles.size() << std::endl;
+	m_tiles = createTiles(nodes);
+	std::cerr << m_tiles.size() << " tiles Loaded." << std::endl;
 }
 
 }

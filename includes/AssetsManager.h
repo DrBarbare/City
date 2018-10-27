@@ -25,6 +25,7 @@ class AssetsManager
 
 static std::unordered_map<assets::Textures, std::filesystem::path> m_textures_paths;
 static std::unordered_map<assets::Textures, sf::Texture> m_textures;
+static std::unordered_map<std::string_view, Tile> m_tiles;
 
 public:
 	AssetsManager() = delete;
@@ -32,6 +33,7 @@ public:
 
 	static sf::Texture& load(assets::Textures texture);
 	static void loadTiles();
+	static const auto& tiles() { return m_tiles; };
 };
 
 }
