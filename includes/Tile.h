@@ -22,8 +22,8 @@ public:
 		storage
 	};
 
-	const Property& property(Properties prop) const { return m_properties[prop]; }
-	void property(Properties prop, Propery val) { m_properties[prop] = val; }
+	const Property& property(Properties prop) const { return m_properties.at(prop); }
+	void property(Properties prop, Property val) { m_properties[prop] = val; }
 
 private:
 	std::unordered_map<Properties, Property> m_properties;
