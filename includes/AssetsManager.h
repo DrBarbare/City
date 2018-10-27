@@ -6,6 +6,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "Tile.h"
+
 namespace city
 {
 

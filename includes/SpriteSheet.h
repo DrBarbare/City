@@ -22,6 +22,7 @@ class SpriteSheet
 
 public:
 
+	SpriteSheet() = default;
 	SpriteSheet(const std::filesystem::path& file,
 	            sf::IntRect initial_frame);
 

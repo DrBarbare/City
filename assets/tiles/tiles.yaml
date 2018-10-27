@@ -1,45 +1,45 @@
 ---
-- grass:
-    cost: 0
+grass:
+  cost: 0
 
-- forest:
-    cost: 0
+forest:
+  cost: 0
 
-- water:
-    cost: 0
+water:
+  cost: 0
 
-- road:
-    cost: 100
+road:
+  cost: 100
 
-- commercial:
-    - level-0: &LVL0
-        cost: 200
-        maximum_level: 0
-        growth_factor: 0
-        production: 0
-        storage: 0
-    - level-1:
-        maximum_level: 0
-        growth_factor: 0
-        production: 0
-        storage: 0
-    - level-2:
-        maximum_level: 0
-        growth_factor: 0
-        production: 0
-        storage: 0
+commercial:
+  - level-0: &LVL0
+      cost: 200
+      maximum_level: 0
+      maximum_population: 0
+      production: 0
+      storage: 0
+  - level-1:
+      maximum_level: 0
+      maximum_population: 0
+      production: 0
+      storage: 0
+  - level-2:
+      maximum_level: 0
+      maximum_population: 0
+      production: 0
+      storage: 0
 
-- industrial:
-    cost: 200
-    maximum_level: 0
-    growth_factor: 0
-    production: 0
-    storage: 0
+industrial:
+  cost: 200
+  maximum_level: 0
+  growth_factor: 0
+  production: 0
+  storage: 0
 
-- residential:
-    cost: 0
-    maximum_level: 0
-    growth_factor: 0
-    production: 0
-    storage: 0
+residential:
+  cost: 0
+  maximum_level: 0
+  growth_factor: 0
+  production: 0
+  storage: 0
 ---

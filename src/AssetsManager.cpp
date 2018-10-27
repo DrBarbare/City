@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <yaml-cpp/yaml.h>
 #include "AssetsManager.h"
 
@@ -29,40 +30,52 @@ AssetsManager::load(assets::Textures texture)
 }
 
 void
-printKeys(const YAML::Node& node, int indent)
+fillTile(const YAML::Node& node, Tile& tile)
 {
-	switch (node.Type()) {
-		case YAML::NodeType::Sequence:
-			std::cout << "-- Seq --" << std::endl;
-			for (auto it = node.begin(); it != node.end(); ++it) {
-				auto element = *it;
-				printKeys(element, indent);
-				// recurse on "element"
-			}
-			break;
-		case YAML::NodeType::Map:
-			for (auto it = node.begin(); it != node.end(); ++it) {
-				auto key = it->first;
-				auto value = it->second;
-				for (auto i = 0; i < indent; ++i)
-				{
-					std::cout << "\t";
-				}
-				std::cout << key << std::endl;
-				printKeys(value, indent + 1);
-				// recurse on "key" and "value"
-				// if you're sure that "key" is a string, just grab it here
-			}
-			break;
-		default: break;
+	for (const auto& config_prop : node)
+	{
+		auto prop = Tile::propertyFromName(config_prop.first.as<std::string>());
+		auto val  = config_prop.second.as<std::size_t>();
+		tile.property(prop, val);
 	}
+}
+
+std::unordered_map<std::string_view, Tile>
+createTiles(const YAML::Node& node)
+{
+	std::unordered_map<std::string_view, Tile> tiles;
+	for (const auto& element : node)
+	{
+		auto name = element.first.as<std::string>();
+		auto p = tiles.emplace(std::move(name), Tile{});
+		if (p.second)
+		{
+			auto props = element.second;
+			if (props.IsSequence())
+			{
+				// TODO: Handle levels
+				std::cerr << name << " has levels\n";
+				// Tile has levels
+			}
+			else
+			{
+				fillTile(props, p.first->second);
+			}
+		}
+		else
+		{
+			std::cerr << "Already in\n";
+		}
+	}
+	return tiles;
 }
 
 void
 AssetsManager::loadTiles()
 {
 	auto nodes = YAML::LoadFile("assets/tiles/tiles.yaml");
-	printKeys(nodes, 0);
+	auto tiles = createTiles(nodes);
+	std::cerr << "7 tiles Loaded: " << tiles.size() << std::endl;
 }
 
 }
