@@ -29,7 +29,6 @@ Animation::getOffset(float dt_s)
 			m_accumulated_time = 0;
 		}
 	}
-	
 	return next_frame;
 }
 

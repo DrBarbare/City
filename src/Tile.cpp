@@ -2,10 +2,36 @@
 
 namespace city
 {
+
+void
+Tile::spriteSheet(SpriteSheet sheet) noexcept
+{
+	m_sprite_sheet = std::move(sheet);
+}
+
+
+void
+Tile::update(Game& game, const float dt)
+{
+}
+
+void
+Tile::draw(Window& window, const float dt)
+{
+	auto sprite = m_sprite_sheet.next(dt);
+	sprite.setPosition(300, 100);
+	sprite.scale(10.0f, 10.0f);
+	window.draw(std::move(sprite));
+}
+
+/*******************************************************/
+/*********  Properties utilities             ***********/
+/*******************************************************/
 namespace
 {
 static const std::unordered_map<Tile::Properties, std::string_view> properties_names
 {
+	{ Tile::Properties::name,           "name"},
 	{ Tile::Properties::cost,           "cost"},
 	{ Tile::Properties::population,     "population"},
 	{ Tile::Properties::max_population, "max_population"},
@@ -56,6 +82,11 @@ Tile::propertyToName(Tile::Properties prop)
 	}
 }
 
+void
+Tile::property(Properties prop, Property val) noexcept
+{
+	m_properties[prop] = std::move(val);
+}
 } // namespace city
 
 

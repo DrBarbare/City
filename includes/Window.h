@@ -17,6 +17,7 @@ class Window
 	sf::Clock m_clock;
 	float m_dt_s;
 
+	std::vector<sf::Sprite> m_sprites;
 	sf::Sprite m_background;
 	sf::Font m_font;
 	sf::Text m_fps;
@@ -27,6 +28,7 @@ class Window
 public:
 	Window();
 	float dt_s() const;
+	void draw(sf::Sprite sprite);
 	void display(const std::function<void()>& draw);
 	operator bool() const { return m_window.isOpen(); }
 

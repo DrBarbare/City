@@ -5,7 +5,7 @@ grass:
   animations:
     frame_shape: &DEFAULT_FRAME [0, 0, 16, 8]
     rows:
-        - { offset: 0, frames: 1, duration: 0.0 }
+        - { offset: 0, frames: 1, duration: 1.0 }
 
 forest:
   properties:
@@ -13,7 +13,7 @@ forest:
   animations:
     frame_shape: *DEFAULT_FRAME
     rows:
-        - { offset: 0, frames: 1, duration: 0.0 }
+        - { offset: 0, frames: 1, duration: 1.0 }
 
 water:
   properties:
@@ -31,7 +31,7 @@ road:
   animations:
     frame_shape: *DEFAULT_FRAME
     rows:
-        - { offset: 0, frames: 1, duration: 0.0 }
+        - { offset: 0, frames: 1, duration: 1.0 }
 
 commercial:
   properties:
@@ -54,7 +54,7 @@ commercial:
   animations:
     frame_shape: *DEFAULT_FRAME
     rows:
-        - { offset: 0, frames: 1, duration: 0.0 }
+        - { offset: 0, frames: 1, duration: 1.0 }
 
 industrial:
   properties:
@@ -66,7 +66,7 @@ industrial:
   animations:
     frame_shape: *DEFAULT_FRAME
     rows:
-        - { offset: 0, frames: 1, duration: 0.0 }
+        - { offset: 0, frames: 1, duration: 1.0 }
 
 residential:
   properties:
@@ -78,5 +78,5 @@ residential:
   animations:
     frame_shape: *DEFAULT_FRAME
     rows:
-        - { offset: 0, frames: 1, duration: 0.0 }
+        - { offset: 0, frames: 1, duration: 1.0 }
 ---

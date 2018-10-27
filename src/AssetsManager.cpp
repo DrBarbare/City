@@ -27,6 +27,12 @@ static bool decode(const Node& node, sf::IntRect& rhs)
 };
 }
 
+namespace
+{
+std::filesystem::path assets_dir = "assets";
+std::filesystem::path tiles_dir = assets_dir / "tiles";
+}
+
 namespace city
 {
 
@@ -52,7 +58,7 @@ AssetsManager::load(assets::Textures texture)
 	}
 }
 
-std::unordered_map<std::string_view, Tile>
+std::unordered_map<std::string, Tile>
 AssetsManager::m_tiles;
 
 void
@@ -74,36 +80,42 @@ fillTileProperties(const YAML::Node& node, Tile& tile)
 }
 
 void
-loadTileAnimation(const std::string_view& name, const YAML::Node& node, Tile& tile)
+loadTileAnimation(const YAML::Node& node, Tile& tile)
 {
 	if (node && node.IsMap())
 	{
-	std::cout << "Getting animations" << std::endl;
-	auto file = (std::filesystem::path("assets/tiles") / name).replace_extension(".png");
-	SpriteSheet sheet(file, node["frame_shape"].as<sf::IntRect>());
-	
-	for (const auto row : node["rows"])
-	{
-		sheet.add_animation(row["offset"].as<std::size_t>(),
-		                    row["frames"].as<std::size_t>(),
-		                    row["duration"].as<double>());
-	}
+		const auto& name = tile.property<Tile::string_property>(Tile::Properties::name);
+		auto file = (tiles_dir / name).replace_extension(".png");
+
+		std::cout << "Getting image: " << file << std::endl;
+
+		SpriteSheet sheet(file, node["frame_shape"].as<sf::IntRect>());
+
+		for (const auto row : node["rows"])
+		{
+			sheet.add_animation(row["offset"].as<std::size_t>(),
+			                    row["frames"].as<std::size_t>(),
+			                    row["duration"].as<double>());
+		}
+
+		tile.spriteSheet(std::move(sheet));
 	}
 }
 
-std::unordered_map<std::string_view, Tile>
+std::unordered_map<std::string, Tile>
 createTiles(const YAML::Node& node)
 {
-	std::unordered_map<std::string_view, Tile> tiles;
+	std::unordered_map<std::string, Tile> tiles;
 	for (const auto& element : node)
 	{
 		auto name = element.first.as<std::string>();
-		auto p = tiles.emplace(std::move(name), Tile{});
+		auto p = tiles.emplace(name, Tile{});
 		if (p.second)
 		{
 			auto& tile = p.first->second;
-			fillTileProperties(element.second["properties"], p.first->second);
-			loadTileAnimation(name, element.second["animations"], p.first->second);
+			tile.property(Tile::Properties::name, name);
+			fillTileProperties(element.second["properties"], tile);
+			loadTileAnimation(element.second["animations"], tile);
 		}
 		else
 		{
@@ -118,6 +130,10 @@ AssetsManager::loadTiles()
 {
 	auto nodes = YAML::LoadFile("assets/tiles/tiles.yaml");
 	m_tiles = createTiles(nodes);
+	for (const auto& tile : m_tiles)
+	{
+		std::cout << "Tiles:" << tile.first << std::endl;
+	}
 	std::cerr << m_tiles.size() << " tiles Loaded." << std::endl;
 }
 

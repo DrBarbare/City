@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include "SpriteSheet.h"
 
 namespace city
@@ -5,9 +6,13 @@ namespace city
 
 SpriteSheet::SpriteSheet(const std::filesystem::path& file,
              sf::IntRect initial_frame) :
+	m_current_animation{0},
 	m_initial_frame{std::move(initial_frame)}
 {
-	m_texture.loadFromFile(file);
+	if (!m_texture.loadFromFile(file))
+	{
+		throw std::runtime_error("Could not load image");
+	}
 	m_sprite.setTexture(m_texture);
 	m_sprite.setTextureRect(initial_frame);
 }
@@ -21,7 +26,7 @@ SpriteSheet::next(float dt_s)
 		auto frame_number = m_animations[m_current_animation].getOffset(dt_s);
 		rect.left = rect.width * frame_number;
 		rect.top = rect.height * m_current_animation;
-
+		m_sprite.setTexture(m_texture);
 		m_sprite.setTextureRect(rect);
 	}
 	return current_sprite();

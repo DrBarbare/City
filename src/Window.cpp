@@ -2,7 +2,6 @@
 #include <SFML/System.hpp>
 
 #include "AssetsManager.h"
-#include <iostream>
 
 namespace city
 {
@@ -78,6 +77,12 @@ Window::dt_s() const
 }
 
 void
+Window::draw(sf::Sprite sprite)
+{
+	m_sprites.push_back(std::move(sprite));
+}
+
+void
 Window::display(const std::function<void()>& draw)
 {
 	m_clock.restart();
@@ -91,6 +96,11 @@ Window::display(const std::function<void()>& draw)
 	m_window.draw(m_background);
 	m_fps.setString(std::to_string(1.0 / dt_s()));
 	m_window.draw(m_fps);
+	for (const auto& sprite : m_sprites)
+	{
+		m_window.draw(sprite);
+	}
+	m_sprites.clear();
 	//m_window.popGLStates();
 
 	// Draw UI element

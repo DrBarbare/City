@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <variant>
 
+#include "Game.h"
 #include "SpriteSheet.h"
 
 namespace city
@@ -11,8 +12,12 @@ namespace city
 class Tile
 {
 public:
-	using Property = std::variant<std::size_t, float>;
+	using string_property = std::string;
+	using uint_property = std::size_t;
+	using float_property = float;
+	using Property = std::variant<string_property, uint_property, float_property>;
 	enum class Properties {
+		name,
 		cost,
 		population,
 		max_population,
@@ -26,12 +31,20 @@ public:
 	static Properties propertyFromName(const std::string_view& name);
 	static std::string_view propertyToName(Properties prop);
 
-	const Property& property(Properties prop) const { return m_properties.at(prop); }
-	void property(Properties prop, Property val) { m_properties[prop] = val; }
+	template<typename T>
+	const auto& property(Properties prop) const { return std::get<T>(m_properties.at(prop)); }
+
+
+	void property(Properties prop, Property val) noexcept;
+	void spriteSheet(SpriteSheet sheet) noexcept;
+
+	void update(Game& game, const float dt);
+	void draw(Window& window, const float dt);
 
 private:
+
 	std::unordered_map<Properties, Property> m_properties;
-	SpriteSheet sprite_sheet;
+	SpriteSheet m_sprite_sheet;
 
 };
 }
