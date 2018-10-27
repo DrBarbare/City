@@ -1,9 +1,9 @@
-#include "Atlas.h"
+#include "SpriteSheet.h"
 
 namespace city
 {
 
-Atlas::Atlas(const std::filesystem::path& file,
+SpriteSheet::SpriteSheet(const std::filesystem::path& file,
              sf::IntRect initial_frame) :
 	m_initial_frame{std::move(initial_frame)}
 {
@@ -13,7 +13,7 @@ Atlas::Atlas(const std::filesystem::path& file,
 }
 
 const sf::Sprite&
-Atlas::next(float dt_s)
+SpriteSheet::next(float dt_s)
 {
 	if (!m_animations.empty())
 	{
@@ -28,13 +28,13 @@ Atlas::next(float dt_s)
 }
 
 const sf::Sprite&
-Atlas::current_sprite() const
+SpriteSheet::current_sprite() const
 {
 	return m_sprite;
 }
 
 void
-Atlas::next_animation()
+SpriteSheet::next_animation()
 {
 	m_current_animation = ++m_current_animation % m_animations.size();
 }

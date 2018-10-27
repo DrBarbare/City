@@ -1,5 +1,5 @@
-#ifndef CITY_GAME_ATLAS_H
-#define CITY_GAME_ATLAS_H
+#ifndef CITY_GAME_SPRITESHEET_H
+#define CITY_GAME_SPRITESHEET_H
 
 #include <SFML/Graphics.hpp>
 
@@ -11,7 +11,7 @@
 namespace city
 {
 
-class Atlas
+class SpriteSheet
 {
 	std::size_t m_current_animation;
 	std::vector<Animation> m_animations;
@@ -22,8 +22,8 @@ class Atlas
 
 public:
 
-	Atlas(const std::filesystem::path& file,
-	      sf::IntRect initial_frame);
+	SpriteSheet(const std::filesystem::path& file,
+	            sf::IntRect initial_frame);
 
 	void next_animation();
 	const sf::Sprite& next(float dt_s);
@@ -38,4 +38,4 @@ public:
 
 }
 
-#endif // CITY_GAME_ATLAS_H
+#endif // CITY_GAME_SPRITESHEET_H

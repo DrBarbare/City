@@ -10,7 +10,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(SFGUI REQUIRED)
 find_package(yaml-cpp REQUIRED)
 
-file(GLOB_RECURSE CPPS city/*.cpp)
+file(GLOB_RECURSE CPPS src/*.cpp)
 add_executable(City ${CPPS})
 target_include_directories(City PRIVATE includes)
 target_link_libraries(City PRIVATE SFGUI::SFGUI yaml-cpp stdc++fs)
