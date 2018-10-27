@@ -96,6 +96,9 @@ Window::display(const std::function<void()>& draw)
 	m_window.draw(m_background);
 	m_fps.setString(std::to_string(1.0 / dt_s()));
 	m_window.draw(m_fps);
+
+	// Draw UI element
+	draw();
 	for (const auto& sprite : m_sprites)
 	{
 		m_window.draw(sprite);
@@ -103,8 +106,6 @@ Window::display(const std::function<void()>& draw)
 	m_sprites.clear();
 	//m_window.popGLStates();
 
-	// Draw UI element
-	draw();
 	m_ui.Display( m_window );
 
 	m_window.display();

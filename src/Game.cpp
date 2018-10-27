@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "game_states/Start.h"
 #include "AssetsManager.h"
+#include <iostream>
 
 namespace city
 {
@@ -27,14 +28,14 @@ Game::current_state() const
 void
 Game::loop()
 {
-	const float dt_s = m_window.dt_s();
 
 	while(!m_states.empty()
 	      && m_window)
 	{
+		const float dt_s = m_window.dt_s();
 		m_window.poll_events(current_state().get());
 		current_state()->update(*this, dt_s);
-		m_window.display([&]{
+		m_window.display([dt_s, this]{
 			current_state()->draw(m_window, dt_s);
 		});
 	}

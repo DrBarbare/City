@@ -11,7 +11,7 @@ Animation::Animation(std::size_t start_offset,
 	m_number_frames{number_frames},
 	m_frame_duration{frame_duration},
 	m_accumulated_time{0.0f}
-{}
+{ }
 
 std::size_t
 Animation::getOffset(float dt_s)
@@ -29,6 +29,7 @@ Animation::getOffset(float dt_s)
 			m_accumulated_time = 0;
 		}
 	}
+
 	return next_frame;
 }
 
