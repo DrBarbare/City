@@ -30,10 +30,6 @@ Editor::Editor() : m_leaveState{false}
 	m_ui_window = sfg::Window::Create();
 	m_ui_window->SetTitle( "Menu" );
 	m_ui_window->Add( m_box );
-
-
-	const auto& tiles = AssetsManager::tiles();
-	m_tiles.push_back(tiles.at("water"));
 }
 
 void
@@ -51,10 +47,7 @@ Editor::draw(Window& window, const float dt)
 {
 	// Create a desktop and add the window to it.
 	window.desktop().Add( m_ui_window );
-	for (auto& tile : m_tiles)
-	{
-		tile.draw(window, dt);
-	}
+	m_world.draw(window, dt);
 }
 
 

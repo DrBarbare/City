@@ -1,9 +1,8 @@
 #ifndef CITY_GAME_STATE_EDITOR_H
 #define CITY_GAME_STATE_EDITOR_H
 
-#include <vector>
 #include "GameState.h"
-#include "Tile.h"
+#include "World.h"
 
 namespace city::state
 {
@@ -16,7 +15,7 @@ class Editor : public GameState
 	sfg::Box::Ptr m_box;
 	sfg::Window::Ptr m_ui_window;
 
-	std::vector<Tile> m_tiles;
+	World m_world;
 public:
 	Editor();
 	void update(Game& game, const float dt) override;
