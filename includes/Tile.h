@@ -31,6 +31,8 @@ public:
 	static Properties propertyFromName(const std::string_view& name);
 	static std::string_view propertyToName(Properties prop);
 
+	static float tileSize() noexcept;
+
 	template<typename T>
 	const auto& property(Properties prop) const { return std::get<T>(m_properties.at(prop)); }
 

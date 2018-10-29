@@ -51,6 +51,28 @@ Window::poll_events(EventListener* listener)
 			//if(event.key.code == sf::Keyboard::Escape) this->game->window.close();
 			break;
 		}
+		case sf::Event::MouseMoved:
+		{
+			auto pos = sf::Mouse::getPosition(m_window);
+			listener->on_mouse_moved(pos.x, pos.y);
+			break;
+		}
+		case sf::Event::MouseButtonPressed:
+		{
+			auto pos = sf::Mouse::getPosition(m_window);
+			listener->on_mouse_button_pressed(event.mouseButton.button, pos.x, pos.y);
+			break;
+		}
+		case sf::Event::MouseButtonReleased:
+		{
+			auto pos = sf::Mouse::getPosition(m_window);
+			listener->on_mouse_button_released(event.mouseButton.button, pos.x, pos.y);
+			break;
+		}
+		case sf::Event::MouseWheelMoved:
+		{
+			listener->on_mouse_wheel(event.mouseWheel.delta);
+		}
 		default: break;
 		}
 	}
@@ -77,12 +99,6 @@ Window::dt_s() const
 }
 
 void
-Window::draw(sf::Sprite sprite)
-{
-	m_sprites.push_back(std::move(sprite));
-}
-
-void
 Window::display(const std::function<void()>& draw)
 {
 	m_clock.restart();
@@ -96,15 +112,11 @@ Window::display(const std::function<void()>& draw)
 	m_window.draw(m_background);
 	m_fps.setString(std::to_string(1.0 / dt_s()));
 	m_window.draw(m_fps);
-
+	auto view = m_window.getDefaultView();
 	// Draw UI element
 	draw();
-	for (const auto& sprite : m_sprites)
-	{
-		m_window.draw(sprite);
-	}
-	m_sprites.clear();
 	//m_window.popGLStates();
+	m_window.setView(view);
 
 	m_ui.Display( m_window );
 

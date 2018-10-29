@@ -60,4 +60,10 @@ World::draw(Window& window, float dt)
 	}
 }
 
+sf::Vector2f
+World::gameDimension() const
+{
+	return sf::Vector2f(m_width, m_height * 0.5) * Tile::tileSize();
+}
+
 }

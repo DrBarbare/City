@@ -21,6 +21,12 @@ constexpr std::size_t Yoffset = 0;
 constexpr float scale_factor = 5.0f;
 constexpr std::size_t tile_size = 8 * scale_factor; // Smaller size of a 1x1 tile, isometry makes it a bit complex...
 
+float
+Tile::tileSize() noexcept
+{
+	return tile_size;
+}
+
 void
 Tile::draw(Window& window, const float dt, std::size_t col, std::size_t row)
 {
@@ -38,7 +44,7 @@ Tile::draw(Window& window, const float dt, std::size_t col, std::size_t row)
 	
 	sprite.setPosition(pos);
 
-	window.draw(std::move(sprite));
+	window.renderer().draw(std::move(sprite));
 }
 
 /*******************************************************/

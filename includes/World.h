@@ -17,6 +17,8 @@ public:
 	void draw(Window& window, float dt);
 	void update(Game& window, float dt);
 
+	sf::Vector2f gameDimension() const;
+
 
 private:
 	std::size_t size() const;
