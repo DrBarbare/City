@@ -18,7 +18,7 @@ Tile::update(Game& game, const float dt)
 
 constexpr std::size_t Xoffset = 0;
 constexpr std::size_t Yoffset = 0;
-constexpr float scale_factor = 5.0f;
+constexpr float scale_factor = 1.0f;
 constexpr std::size_t tile_size = 8 * scale_factor; // Smaller size of a 1x1 tile, isometry makes it a bit complex...
 
 float
