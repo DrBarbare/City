@@ -11,7 +11,8 @@ class Editor : public GameState
 	enum class ViewState
 	{
 		none,
-		pan
+		pan,
+		select
 	};
 
 	bool m_leaveState;
@@ -28,17 +29,23 @@ class Editor : public GameState
 
 	World m_world;
 
+	sf::Vector2f m_selection_start;
+	sf::Vector2f m_selection_position;
+	World::point_condition selectionCondition();
+
 public:
 	Editor();
 	void update(Game& game, const float dt) override;
 	void draw(Window& window, const float dt) override;
 
 
+	void on_mouse_wheel(float delta) override;
 	void on_mouse_button_pressed(int button, float x, float y) override;
-	void on_mouse_button_pressed(int button, const EventListener::MousePixelToCoords& p2c) override;
 	void on_mouse_button_released(int button, float x, float y) override;
 	void on_mouse_moved(float x, float y) override;
-	void on_mouse_wheel(float delta) override;
+	void on_mouse_button_pressed(int button, const EventListener::MousePixelToCoords& p2c) override;
+	void on_mouse_button_released(int button, const EventListener::MousePixelToCoords& p2c) override;
+	void on_mouse_moved(const EventListener::MousePixelToCoords& p2c) override;
 };
 }
 

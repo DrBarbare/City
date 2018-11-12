@@ -43,7 +43,7 @@ public:
 	void spriteSheet(SpriteSheet sheet) noexcept;
 
 	void update(Game& game, const float dt);
-	void draw(Window& window, const float dt, std::size_t col, std::size_t row);
+	void draw(Window& window, const float dt, std::size_t col, std::size_t row, bool highlight);
 
 private:
 

@@ -1,5 +1,4 @@
 #include "Tile.h"
-#include <iostream>
 
 namespace city
 {
@@ -28,7 +27,7 @@ Tile::tileSize() noexcept
 }
 
 void
-Tile::draw(Window& window, const float dt, std::size_t col, std::size_t row)
+Tile::draw(Window& window, const float dt, std::size_t col, std::size_t row, bool highlight)
 {
 	auto sprite = m_sprite_sheet.next(dt);
 
@@ -43,6 +42,15 @@ Tile::draw(Window& window, const float dt, std::size_t col, std::size_t row)
 	pos.y = (col + row) * tile_size * 0.5 + Yoffset;
 	
 	sprite.setPosition(pos);
+
+	if (highlight)
+	{
+		sprite.setColor(sf::Color(0x7d, 0x7d, 0x7d));
+	}
+	else
+	{
+		sprite.setColor(sf::Color(0xff, 0xff, 0xff));
+	}
 
 	window.renderer().draw(std::move(sprite));
 }

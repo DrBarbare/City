@@ -13,15 +13,27 @@ namespace city
 class World
 {
 public:
+	using point_condition = std::function<bool(std::size_t, std::size_t)>;
 	World();
 
-	void draw(Window& window, float dt);
+	void draw(Window& window, float dt, const point_condition& highlight);
 	void update(Game& window, float dt);
 
 	sf::Vector2f gameDimension() const;
 
-	sf::Vector2f screenToWorld(const sf::Vector2f& pos) const;
+	sf::Vector2f viewCoordsToWorld(const sf::Vector2f& pos) const;
 	void regionInfo(sf::Vector2f pos) const;
+
+	
+	std::size_t width() const noexcept
+	{
+		return m_tiles.width();
+	}
+
+	std::size_t height() const noexcept
+	{
+		return m_tiles.height();
+	}
 
 private:
 	std::size_t size() const;

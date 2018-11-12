@@ -59,11 +59,11 @@ World::size() const
 }
 
 void
-World::draw(Window& window, float dt)
+World::draw(Window& window, float dt, const point_condition& highlight)
 {
 	m_tiles.for_each([&](auto x, auto y, auto& val)
 			{
-				val.draw(window, dt, x, y);
+				val.draw(window, dt, x, y, highlight(x, y));
 			});
 }
 
@@ -74,32 +74,26 @@ World::gameDimension() const
 }
 
 sf::Vector2f
-World::screenToWorld(const sf::Vector2f& pos) const
+World::viewCoordsToWorld(const sf::Vector2f& pos) const
 {
-	std::cerr << "Clicked in: " << pos.x << "x" << pos.y << "\n";
-
 	float x = pos.y / Tile::tileSize() + pos.x / (2.0f * Tile::tileSize()) - m_tiles.width() * 0.5 - 0.5;
 	float y = pos.y / Tile::tileSize() - pos.x / (2.0f * Tile::tileSize()) + m_tiles.width() * 0.5 + 0.5;
-
-
-	std::cerr << "Map coords in: " << x << "x" << y << "\n";
 	return {x, y};
 }
 
 void
-World::regionInfo(sf::Vector2f pos) const
+World::regionInfo(sf::Vector2f coords) const
 {
-	auto coords = screenToWorld(pos);
 	const std::size_t x = coords.x;
 	const std::size_t y = coords.y;
 	if (m_tiles.check_coordinates(x, y))
 	{
-	auto points = m_floodFill(x, y);
-	std::cerr << "Region contains: " << points.size() << " tiles\n.";
+		auto points = m_floodFill(x, y);
+		std::cerr << "Region contains: " << points.size() << " tiles.\n";
 	}
 	else
 	{
-		std::cerr << "Click not on map";	
+		std::cerr << "Click not on map";
 	}
 }
 

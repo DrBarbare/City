@@ -49,13 +49,36 @@ Editor::update(Game& game, const float dt)
 	}
 }
 
+World::point_condition
+Editor::selectionCondition()
+{
+	if (m_view_state == ViewState::select)
+	{
+		std::size_t x0 = std::clamp<float>(m_selection_start.x,    0.0f, m_world.width());
+		std::size_t y0 = std::clamp<float>(m_selection_start.y,    0.0f, m_world.height());
+		std::size_t x1 = std::clamp<float>(m_selection_position.x, 0.0f, m_world.width());
+		std::size_t y1 = std::clamp<float>(m_selection_position.y, 0.0f, m_world.height());
+		if (x0 > x1) std::swap(x0, x1);
+		if (y0 > y1) std::swap(y0, y1);
+
+		return [x0, x1, y0, y1](std::size_t x, std::size_t y)
+		{
+			return x0 <= x && x <= x1 && y0 <= y && y <= y1;
+		};
+	}
+	else
+	{
+		return [](std::size_t,std::size_t) { return false; };
+	}
+}
+
 void
 Editor::draw(Window& window, const float dt)
 {
 	window.renderer().setView(m_view);
 	// Create a desktop and add the window to it.
 	window.desktop().Add( m_ui_window );
-	m_world.draw(window, dt);
+	m_world.draw(window, dt, selectionCondition());
 }
 
 void
@@ -65,20 +88,6 @@ Editor::on_mouse_button_pressed(int button, float x, float y)
 	{
 		m_view_state = ViewState::pan;
 		m_last_mouse_position = sf::Vector2f(x, y);
-	}
-}
-
-void
-Editor::on_mouse_button_pressed(int button, const EventListener::MousePixelToCoords& p2c)
-{
-	auto pos = p2c(m_view);
-	if (button == sf::Mouse::Right)
-	{
-		m_world.regionInfo(pos);
-	}
-	else if (button == sf::Mouse::Right)
-	{
-
 	}
 }
 
@@ -99,6 +108,42 @@ Editor::on_mouse_moved(float x, float y)
 		auto anchor = m_last_mouse_position;
 		m_last_mouse_position = sf::Vector2f{x, y};
 		m_view.move(-1.0f * (m_last_mouse_position - anchor) * m_zoom);
+	}
+}
+
+void
+Editor::on_mouse_button_pressed(int button, const EventListener::MousePixelToCoords& p2c)
+{
+	auto pos = m_world.viewCoordsToWorld(p2c(m_view));
+	if (button == sf::Mouse::Right)
+	{
+		m_world.regionInfo(std::move(pos));
+	}
+	else if (button == sf::Mouse::Left)
+	{
+		m_view_state = ViewState::select;
+		m_selection_start = pos;
+		m_selection_position = pos;
+	}
+}
+
+void
+Editor::on_mouse_button_released(int button, const EventListener::MousePixelToCoords& p2c)
+{
+	//auto pos = m_world.viewCoordsToWorld(p2c(m_view));
+	if (m_view_state == ViewState::select && button == sf::Mouse::Left)
+	{
+		m_view_state = ViewState::none;
+	}
+}
+
+void
+Editor::on_mouse_moved(const EventListener::MousePixelToCoords& p2c)
+{
+	auto pos = m_world.viewCoordsToWorld(p2c(m_view));
+	if (m_view_state == ViewState::select)
+	{
+		m_selection_position = std::move(pos);
 	}
 }
 
