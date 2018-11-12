@@ -1,7 +1,8 @@
 #ifndef CITY_GAME_WORLD_H
 #define CITY_GAME_WORLD_H
 
-#include <vector>
+#include "algorithms/Matrix.h"
+#include "algorithms/FloodFill.h"
 
 #include "Game.h"
 #include "Tile.h"
@@ -19,6 +20,8 @@ public:
 
 	sf::Vector2f gameDimension() const;
 
+	sf::Vector2f screenToWorld(const sf::Vector2f& pos) const;
+	void regionInfo(sf::Vector2f pos) const;
 
 private:
 	std::size_t size() const;
@@ -26,7 +29,8 @@ private:
 
 	std::size_t m_width;
 	std::size_t m_height;
-	std::vector<Tile> m_tiles;
+	algorithms::Matrix<Tile> m_tiles;
+	mutable algorithms::FloodFill<Tile> m_floodFill;
 };
 
 } // namespace city

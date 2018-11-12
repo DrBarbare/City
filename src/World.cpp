@@ -4,6 +4,8 @@
 #include "World.h"
 #include "AssetsManager.h"
 
+#include <iostream>
+
 namespace
 {
 
@@ -28,7 +30,13 @@ namespace city
 
 World::World() :
 	m_width{10},
-	m_height{10}
+	m_height{10},
+	m_tiles{m_width, m_height},
+	m_floodFill(m_tiles,
+	            [](const Tile& tileA, const Tile& tileB)
+	            {
+	            	return tileA.name() == tileB.name();
+	            })
 {
 	const auto& all_tiles = AssetsManager::tiles();
 	Tile store[3] =
@@ -38,8 +46,7 @@ World::World() :
 		all_tiles.at("forest")
 	};
 
-	m_tiles.reserve(size());
-	std::transform(&mock[0], (&mock[size() -1])+1, std::back_inserter(m_tiles),
+	std::transform(&mock[0], (&mock[size() -1])+1, m_tiles.begin(),
 	[&store](int val) {
 		return store[val];
 	});
@@ -54,16 +61,46 @@ World::size() const
 void
 World::draw(Window& window, float dt)
 {
-	for (std::size_t i = 0; i < m_tiles.size(); ++i)
-	{
-		m_tiles[i].draw(window, dt, i % m_width, i / m_width);
-	}
+	m_tiles.for_each([&](auto x, auto y, auto& val)
+			{
+				val.draw(window, dt, x, y);
+			});
 }
 
 sf::Vector2f
 World::gameDimension() const
 {
 	return sf::Vector2f(m_width, m_height * 0.5) * Tile::tileSize();
+}
+
+sf::Vector2f
+World::screenToWorld(const sf::Vector2f& pos) const
+{
+	std::cerr << "Clicked in: " << pos.x << "x" << pos.y << "\n";
+
+	float x = pos.y / Tile::tileSize() + pos.x / (2.0f * Tile::tileSize()) - m_tiles.width() * 0.5 - 0.5;
+	float y = pos.y / Tile::tileSize() - pos.x / (2.0f * Tile::tileSize()) + m_tiles.width() * 0.5 + 0.5;
+
+
+	std::cerr << "Map coords in: " << x << "x" << y << "\n";
+	return {x, y};
+}
+
+void
+World::regionInfo(sf::Vector2f pos) const
+{
+	auto coords = screenToWorld(pos);
+	const std::size_t x = coords.x;
+	const std::size_t y = coords.y;
+	if (m_tiles.check_coordinates(x, y))
+	{
+	auto points = m_floodFill(x, y);
+	std::cerr << "Region contains: " << points.size() << " tiles\n.";
+	}
+	else
+	{
+		std::cerr << "Click not on map";	
+	}
 }
 
 }

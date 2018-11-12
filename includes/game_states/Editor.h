@@ -27,6 +27,7 @@ class Editor : public GameState
 	sfg::Window::Ptr m_ui_window;
 
 	World m_world;
+
 public:
 	Editor();
 	void update(Game& game, const float dt) override;
@@ -34,6 +35,7 @@ public:
 
 
 	void on_mouse_button_pressed(int button, float x, float y) override;
+	void on_mouse_button_pressed(int button, const EventListener::MousePixelToCoords& p2c) override;
 	void on_mouse_button_released(int button, float x, float y) override;
 	void on_mouse_moved(float x, float y) override;
 	void on_mouse_wheel(float delta) override;

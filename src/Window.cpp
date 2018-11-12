@@ -61,6 +61,11 @@ Window::poll_events(EventListener* listener)
 		{
 			auto pos = sf::Mouse::getPosition(m_window);
 			listener->on_mouse_button_pressed(event.mouseButton.button, pos.x, pos.y);
+			listener->on_mouse_button_pressed(event.mouseButton.button,
+			        [this, pos = std::move(pos)](const sf::View& view)
+					{
+						return m_window.mapPixelToCoords(pos, view);
+					});
 			break;
 		}
 		case sf::Event::MouseButtonReleased:

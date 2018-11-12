@@ -36,6 +36,8 @@ public:
 	template<typename T>
 	const auto& property(Properties prop) const { return std::get<T>(m_properties.at(prop)); }
 
+	const auto& name() const { return property<string_property>(Properties::name); }
+
 
 	void property(Properties prop, Property val) noexcept;
 	void spriteSheet(SpriteSheet sheet) noexcept;
