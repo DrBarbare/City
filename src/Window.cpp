@@ -55,6 +55,10 @@ Window::poll_events(EventListener* listener)
 		{
 			auto pos = sf::Mouse::getPosition(m_window);
 			listener->on_mouse_moved(pos.x, pos.y);
+			listener->on_mouse_moved([this, pos = std::move(pos)](const sf::View& view)
+					{
+						return m_window.mapPixelToCoords(pos, view);
+					});
 			break;
 		}
 		case sf::Event::MouseButtonPressed:
@@ -72,6 +76,11 @@ Window::poll_events(EventListener* listener)
 		{
 			auto pos = sf::Mouse::getPosition(m_window);
 			listener->on_mouse_button_released(event.mouseButton.button, pos.x, pos.y);
+			listener->on_mouse_button_released(event.mouseButton.button,
+			        [this, pos = std::move(pos)](const sf::View& view)
+					{
+						return m_window.mapPixelToCoords(pos, view);
+					});
 			break;
 		}
 		case sf::Event::MouseWheelMoved:

@@ -71,10 +71,14 @@ Editor::on_mouse_button_pressed(int button, float x, float y)
 void
 Editor::on_mouse_button_pressed(int button, const EventListener::MousePixelToCoords& p2c)
 {
-	if (button == sf::Mouse::Left)
+	auto pos = p2c(m_view);
+	if (button == sf::Mouse::Right)
 	{
-		auto pos = p2c(m_view);
 		m_world.regionInfo(pos);
+	}
+	else if (button == sf::Mouse::Right)
+	{
+
 	}
 }
 
