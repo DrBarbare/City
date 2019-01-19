@@ -7,3 +7,5 @@
 
 **/CMakeCache.txt
 **/CMakeFiles/
+.vscode/
+.vs/

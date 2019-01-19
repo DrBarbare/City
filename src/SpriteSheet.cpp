@@ -9,7 +9,7 @@ SpriteSheet::SpriteSheet(const std::filesystem::path& file,
 	m_current_animation{0},
 	m_initial_frame{std::move(initial_frame)}
 {
-	if (!m_texture.loadFromFile(file))
+	if (!m_texture.loadFromFile(file.string()))
 	{
 		throw std::runtime_error("Could not load image");
 	}
