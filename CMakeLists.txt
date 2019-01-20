@@ -8,6 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if (MSVC)
     set(SFML_STATIC_LIBRARIES TRUE)
+    set(WIN32 WIN32) # add this flag to add_executable to remove console
 endif()
 
 find_package(SFGUI REQUIRED)
@@ -21,4 +22,7 @@ target_link_libraries(City PRIVATE SFGUI::SFGUI yaml-cpp)
 
 if (NOT MSVC)
     target_link_libraries(City PRIVATE stdc++fs)
+else()
+    # # Remove the console on windows
+    # target_link_libraries(City PRIVATE sfml-main)
 endif()
