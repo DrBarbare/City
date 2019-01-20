@@ -45,6 +45,8 @@ public:
 	void update(Game& game, const float dt);
 	void draw(Window& window, const float dt, std::size_t col, std::size_t row, bool highlight);
 
+	bool empty() const noexcept;
+
 private:
 
 	std::unordered_map<Properties, Property> m_properties;

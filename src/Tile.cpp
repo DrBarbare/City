@@ -118,6 +118,12 @@ Tile::property(Properties prop, Property val) noexcept
 {
 	m_properties[prop] = std::move(val);
 }
+
+bool
+Tile::empty() const noexcept
+{
+	return m_properties.empty();
+}
 } // namespace city
 
 

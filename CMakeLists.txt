@@ -19,7 +19,7 @@ find_package(SFGUI REQUIRED)
 find_package(yaml-cpp REQUIRED)
 
 file(GLOB_RECURSE CPPS src/*.cpp)
-add_executable(City ${WIN32} ${CPPS})
+add_executable(City ${CPPS})
 
 target_include_directories(City PRIVATE includes)
 target_link_libraries(City PRIVATE SFGUI::SFGUI yaml-cpp)

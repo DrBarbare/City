@@ -29,6 +29,14 @@ Editor::Editor() :
 	m_box->Pack( m_label );
 	m_box->Pack( m_button, false );
 
+	m_table = sfg::ListBox::Create();
+	for (auto tile : AssetsManager::tiles())
+	{
+		m_table->AppendItem(sf::String{tile.first});
+	}
+	m_table->AppendItem(sf::String{"Nothing"});
+	m_box->Pack(m_table);
+
 	// Create a window and add the box layouter to it. Also set the window's title.
 	m_ui_window = sfg::Window::Create();
 	m_ui_window->SetTitle("Menu");
@@ -48,20 +56,27 @@ Editor::update(Game& game, const float dt)
 	}
 }
 
+std::tuple<std::size_t, std::size_t, std::size_t, std::size_t>
+Editor::clampSelectionWorld()
+{
+	std::size_t x0 = m_selection_start.x;
+	std::size_t y0 = m_selection_start.y;
+	std::size_t x1 = std::clamp<float>(m_selection_position.x, 0.0f, m_world.width()  - 1);
+	std::size_t y1 = std::clamp<float>(m_selection_position.y, 0.0f, m_world.height() - 1);
+	if (x0 > x1) std::swap(x0, x1);
+	if (y0 > y1) std::swap(y0, y1);
+
+	return std::make_tuple(x0, y0, x1, y1);
+}
+
 World::point_condition
 Editor::selectionCondition()
 {
 	if (m_view_state == ViewState::select
 	    && m_selection_start.x >= 0.0f && m_selection_start.y >= 0.0f
-		&& m_selection_start.x <= m_world.width() && m_selection_start.y <= m_world.height())
+		&& m_selection_start.x < m_world.width() && m_selection_start.y < m_world.height())
 	{
-		std::size_t x0 = m_selection_start.x;
-		std::size_t y0 = m_selection_start.y;
-		std::size_t x1 = std::clamp<float>(m_selection_position.x, 0.0f, m_world.width());
-		std::size_t y1 = std::clamp<float>(m_selection_position.y, 0.0f, m_world.height());
-		if (x0 > x1) std::swap(x0, x1);
-		if (y0 > y1) std::swap(y0, y1);
-
+		auto [x0, y0, x1, y1] = clampSelectionWorld();
 		return [x0, x1, y0, y1](std::size_t x, std::size_t y)
 		{
 			return x0 <= x && x <= x1 && y0 <= y && y <= y1;
@@ -71,6 +86,18 @@ Editor::selectionCondition()
 	{
 		return [](std::size_t,std::size_t) { return false; };
 	}
+}
+
+Tile
+Editor::getSelectedTile()
+{
+	Tile tile;
+	auto tile_iterator = AssetsManager::tiles().find(m_table->GetSelectedItemText());
+	if (tile_iterator != AssetsManager::tiles().cend())
+	{
+		tile = tile_iterator->second;
+	}
+	return tile;
 }
 
 void
@@ -121,7 +148,7 @@ Editor::on_mouse_button_pressed(int button, const EventListener::MousePixelToCoo
 		m_world.regionInfo(std::move(pos));
 	}
 	else if (button == sf::Mouse::Left)
-	{
+	{	
 		m_view_state = ViewState::select;
 		m_selection_start = pos;
 		m_selection_position = pos;
@@ -134,6 +161,12 @@ Editor::on_mouse_button_released(int button, const EventListener::MousePixelToCo
 	//auto pos = m_world.viewCoordsToWorld(p2c(m_view));
 	if (m_view_state == ViewState::select && button == sf::Mouse::Left)
 	{
+		auto cond = selectionCondition();
+		if (cond(m_selection_position.x, m_selection_position.y))
+		{
+			auto [x0, y0, x1, y1] = clampSelectionWorld();
+			m_world.setRegion(geometry::Point{x0, y0}, geometry::Point{x1, y1}, getSelectedTile());
+		}
 		m_view_state = ViewState::none;
 	}
 }

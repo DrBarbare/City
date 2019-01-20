@@ -2,6 +2,7 @@
 #define CITY_GAME_WORLD_H
 
 #include "algorithms/Matrix.h"
+#include "geometry/Point.h"
 #include "algorithms/FloodFill.h"
 
 #include "Game.h"
@@ -24,6 +25,7 @@ public:
 	sf::Vector2f viewCoordsToWorld(const sf::Vector2f& pos) const;
 	void regionInfo(sf::Vector2f pos) const;
 
+	void setRegion(geometry::Point tl, geometry::Point br, const Tile& tile);
 	
 	std::size_t width() const noexcept
 	{

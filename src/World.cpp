@@ -59,6 +59,20 @@ World::size() const
 }
 
 void
+World::setRegion(geometry::Point tl, geometry::Point br, const Tile& tile)
+{
+	if (tile.empty()) return;
+
+	for (std::size_t row = tl.y(); row <= br.y(); row++)
+	{
+		for (std::size_t col = tl.x(); col <= br.x(); col++)
+		{
+			m_tiles.at(col, row) = tile;
+		}
+	}
+}
+
+void
 World::draw(Window& window, float dt, const point_condition& highlight)
 {
 	m_tiles.for_each([&](auto x, auto y, auto& val)
