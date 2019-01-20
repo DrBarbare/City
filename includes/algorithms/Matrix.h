@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include "geometry/Size.h"
+
 namespace city::algorithms
 {
 template<typename T>
@@ -13,30 +15,30 @@ public:
 	using value_type   = std::remove_cv_t<element_type>;
 	using size_type    = std::size_t;
 
-	Matrix() = default;
-	Matrix(std::size_t width, std::size_t height)
-		: m_width{width}, m_height{height}, m_data(width*height) {}
-	Matrix(std::size_t width, std::size_t height, T* values)
-		: m_width{width}, m_height{height}, m_data(width*height, values) {}
-	Matrix(std::size_t width, std::size_t height, T value)
-		: m_width{width}, m_height{height}, m_data(width*height, std::move(value)) {}
+	constexpr Matrix() = default;
+	constexpr Matrix(geometry::Size size)
+		: m_size{std::move(size)}, m_data(m_size.area()) {}
+
+	constexpr Matrix(geometry::Size size, T* values)
+		: m_size{std::move(size)}, m_data(m_size.area(), values) {}
+	constexpr Matrix(geometry::Size size, T value)
+		: m_size{std::move(size)}, m_data(m_size.area(), std::move(value)) {}
 
 	void fill(size_type width, size_type height, T value)
 	{
-		m_width = width;
-		m_height = height;
-		m_data = std::vector<value_type>(width * height, std::move(value));
+		m_size = Size{width, height};
+		m_data = std::vector<value_type>(m_size.area(), std::move(value));
 	}
 
 	void fill(T value)
 	{
-		m_data = std::vector<value_type>(size(), std::move(value));
+		m_data = std::vector<value_type>(area(), std::move(value));
 	}
 
 	const T& at(size_type x, size_type y) const
 	{
 		auto p = position(x, y);
-		if (p > size())
+		if (p > area())
 		{
 			throw std::out_of_range("Position outiside of Matrix");
 		}
@@ -46,65 +48,79 @@ public:
 	T& at(size_type x, size_type y)
 	{
 		auto p = position(x, y);
-		if (p > size())
+		if (p > area())
 		{
 			throw std::out_of_range("Position outiside of Matrix");
 		}
 		return m_data[p];
 	}
 
-	size_type width() const noexcept
+	constexpr size_type width() const noexcept
 	{
-		return m_width;
+		return m_size.width();
 	}
 
-	size_type height() const noexcept
+	constexpr size_type height() const noexcept
 	{
-		return m_height;
+		return m_size.height();
 	}
 
-	size_type size() const noexcept
+	constexpr const geometry::Size& size() const noexcept
 	{
-		return m_width * m_height;
+		return m_size;
 	}
 
-	auto begin()
+	constexpr size_type area() const noexcept
+	{
+		return m_size.area();
+	}
+
+	constexpr auto begin() noexcept
 	{
 		return m_data.begin();
 	}
 
-	auto end()
+	constexpr auto cbegin() const noexcept
+	{
+		return m_data.cbegin();
+	}
+
+	constexpr auto end() noexcept
 	{
 		return m_data.end();
+	}
+
+	constexpr auto end() const noexcept
+	{
+		return m_data.cend();
 	}
 
 	template<typename F>
 	void for_each(F&& f)
 	{
-		for (size_type i = 0; i < size(); ++i)
+		for (size_type i = 0; i < area(); ++i)
 		{
 			const auto [x, y] = position(i);
 			f(x, y, m_data[i]);
 		}
 	}
 
-	bool check_coordinates(size_type x, size_type y) const
+	constexpr bool check_coordinates(size_type x, size_type y) const
 	{
-		return x < m_width && y < m_height;
+		return x < m_size.width() && y < m_size.height();
 	}
 
 private:
 	size_type position(size_type x, size_type y) const noexcept
 	{
-		return m_height * y + x;
+		return m_size.height() * y + x;
 	}
 	std::pair<size_type, size_type> position(size_type i) const noexcept
 	{
-		return {i % m_width, i / m_width};
+		return {i % m_size.width(), i / m_size.width()};
 	}
 
-	size_type m_width;
-	size_type m_height;
+	geometry::Size m_size;
 	std::vector<value_type> m_data;
 };
 

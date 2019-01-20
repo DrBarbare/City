@@ -24,7 +24,7 @@ public:
 		: m_cond{std::move(cond)},
 		  m_input{std::cref(input)},
 		  m_target{std::cref(input.at(0,0))},
-		  m_visited(input.width(), input.height(), std::uint8_t{0u})
+		  m_visited(input.size(), std::uint8_t{0u})
 	{}
 
 	RegionPoints

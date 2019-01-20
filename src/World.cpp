@@ -1,6 +1,8 @@
 #include <algorithm>
 #include <iterator>
 
+#include "geometry/Size.h"
+
 #include "World.h"
 #include "AssetsManager.h"
 
@@ -29,9 +31,7 @@ namespace city
 {
 
 World::World() :
-	m_width{10},
-	m_height{10},
-	m_tiles{m_width, m_height},
+	m_tiles{geometry::Size{10, 10}},
 	m_floodFill(m_tiles,
 	            [](const Tile& tileA, const Tile& tileB)
 	            {
@@ -55,7 +55,7 @@ World::World() :
 std::size_t
 World::size() const
 {
-	return m_width * m_height;
+	return m_tiles.area();
 }
 
 void
@@ -70,7 +70,7 @@ World::draw(Window& window, float dt, const point_condition& highlight)
 sf::Vector2f
 World::gameDimension() const
 {
-	return sf::Vector2f(m_width, m_height * 0.5) * Tile::tileSize();
+	return sf::Vector2f(m_tiles.width(), m_tiles.height() * 0.5) * Tile::tileSize();
 }
 
 sf::Vector2f

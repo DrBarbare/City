@@ -38,9 +38,6 @@ public:
 private:
 	std::size_t size() const;
 
-
-	std::size_t m_width;
-	std::size_t m_height;
 	algorithms::Matrix<Tile> m_tiles;
 	mutable algorithms::FloodFill<Tile> m_floodFill;
 };
