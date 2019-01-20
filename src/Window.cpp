@@ -22,7 +22,7 @@ Window::resize_background(std::size_t width, std::size_t height)
 	m_background.setScale(scaleX, scaleY);
 }
 
-void
+bool
 Window::poll_events(EventListener* listener)
 {
 	sf::Event event;
@@ -36,7 +36,7 @@ Window::poll_events(EventListener* listener)
 		{
 			listener->on_closed();
 			m_window.close();
-			break;
+			return false;
 		}
 		/* Resize the window */
 		case sf::Event::Resized:
@@ -90,7 +90,7 @@ Window::poll_events(EventListener* listener)
 		default: break;
 		}
 	}
-	return;
+	return true;
 }
 
 Window::Window() :

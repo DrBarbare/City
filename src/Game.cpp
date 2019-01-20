@@ -28,16 +28,21 @@ Game::current_state() const
 void
 Game::loop()
 {
-
 	while(!m_states.empty()
 	      && m_window)
 	{
 		const float dt_s = m_window.dt_s();
-		m_window.poll_events(current_state().get());
-		current_state()->update(*this, dt_s);
-		m_window.display([dt_s, this]{
-			current_state()->draw(m_window, dt_s);
-		});
+		if (m_window.poll_events(current_state().get()))
+		{
+			current_state()->update(*this, dt_s);
+			m_window.display([dt_s, this]{
+				current_state()->draw(m_window, dt_s);
+			});
+		}
+		else
+		{
+			break;
+		}
 	}
 }
 

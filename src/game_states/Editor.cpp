@@ -17,7 +17,7 @@ Editor::Editor() :
 	// Create a simple button and connect the click signal.
 	m_button = sfg::Button::Create("Back to Main menu");
 	m_button->GetSignal(sfg::Widget::OnLeftClick)
-	        .Connect([&]
+	          .Connect([this]
 	{
 		m_label->SetText( "Leaving..." );
 		m_leaveState = true;
@@ -31,12 +31,11 @@ Editor::Editor() :
 
 	// Create a window and add the box layouter to it. Also set the window's title.
 	m_ui_window = sfg::Window::Create();
-	m_ui_window->SetTitle( "Menu" );
-	m_ui_window->Add( m_box );
+	m_ui_window->SetTitle("Menu");
+	m_ui_window->Add(m_box);
 
 	auto size = m_world.gameDimension();
 	m_view.setCenter(size);
-
 }
 
 void

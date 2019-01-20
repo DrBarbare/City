@@ -17,6 +17,8 @@ class Editor : public GameState
 
 	bool m_leaveState;
 
+	World m_world;
+
 	sf::View m_view;
 	float m_zoom;
 	sf::Vector2f m_last_mouse_position;
@@ -26,8 +28,6 @@ class Editor : public GameState
 	sfg::Label::Ptr m_label;
 	sfg::Box::Ptr m_box;
 	sfg::Window::Ptr m_ui_window;
-
-	World m_world;
 
 	sf::Vector2f m_selection_start;
 	sf::Vector2f m_selection_position;

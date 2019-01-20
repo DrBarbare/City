@@ -30,7 +30,7 @@ public:
 	void display(const std::function<void()>& draw);
 	operator bool() const { return m_window.isOpen(); }
 
-	void poll_events(EventListener* listener);
+	bool poll_events(EventListener* listener);
 	void resize_background(std::size_t width, std::size_t height);
 
 	auto& desktop() { return m_desktop; }
