@@ -52,10 +52,12 @@ Editor::update(Game& game, const float dt)
 World::point_condition
 Editor::selectionCondition()
 {
-	if (m_view_state == ViewState::select)
+	if (m_view_state == ViewState::select
+	    && m_selection_start.x >= 0.0f && m_selection_start.y >= 0.0f
+		&& m_selection_start.x <= m_world.width() && m_selection_start.y <= m_world.height())
 	{
-		std::size_t x0 = std::clamp<float>(m_selection_start.x,    0.0f, m_world.width());
-		std::size_t y0 = std::clamp<float>(m_selection_start.y,    0.0f, m_world.height());
+		std::size_t x0 = m_selection_start.x;
+		std::size_t y0 = m_selection_start.y;
 		std::size_t x1 = std::clamp<float>(m_selection_position.x, 0.0f, m_world.width());
 		std::size_t y1 = std::clamp<float>(m_selection_position.y, 0.0f, m_world.height());
 		if (x0 > x1) std::swap(x0, x1);
