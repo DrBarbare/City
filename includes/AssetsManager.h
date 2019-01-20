@@ -31,6 +31,8 @@ public:
 	AssetsManager() = delete;
 	~AssetsManager() = delete;
 
+	static const std::filesystem::path& themeFile();
+	static std::filesystem::path fontTTFFile(const std::string& font_name, const std::string& type_name);
 	static sf::Texture& load(assets::Textures texture);
 	static void loadTiles();
 	static const auto& tiles() { return m_tiles; };

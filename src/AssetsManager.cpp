@@ -31,6 +31,7 @@ namespace
 {
 std::filesystem::path assets_dir = "assets";
 std::filesystem::path tiles_dir = assets_dir / "tiles";
+std::filesystem::path fonts_dir = assets_dir / "fonts";
 }
 
 namespace city
@@ -41,6 +42,19 @@ AssetsManager::m_textures_paths{{assets::Textures::background, {"assets/backgrou
 
 std::unordered_map<assets::Textures, sf::Texture>
 AssetsManager::m_textures;
+
+const std::filesystem::path&
+AssetsManager::themeFile()
+{
+	static std::filesystem::path file = assets_dir / "city.theme";
+	return file;
+}
+
+std::filesystem::path
+AssetsManager::fontTTFFile(const std::string& font_name, const std::string& type_name)
+{
+	return fonts_dir / font_name / (font_name + "-" + type_name + ".ttf");
+}
 
 sf::Texture&
 AssetsManager::load(assets::Textures texture)

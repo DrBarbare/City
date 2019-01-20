@@ -99,11 +99,12 @@ Window::Window() :
 	m_window.create(sf::VideoMode(1200, 1080), "City");
 	m_window.setFramerateLimit(30);
 	m_background.setTexture(AssetsManager::load(assets::Textures::background));
-	m_font.loadFromFile("/usr/share/fonts/TTF/DejaVuSans.ttf");
+	m_font.loadFromFile(AssetsManager::fontTTFFile("Lato", "Regular").string());
 	m_fps.setFont(m_font);
 	m_fps.setCharacterSize(20); // in pixels, not points!
 	m_fps.setFillColor(sf::Color::Red);
 	m_fps.setStyle(sf::Text::Bold);
+	m_desktop.LoadThemeFromFile(AssetsManager::themeFile().string());
 }
 
 float
