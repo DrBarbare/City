@@ -96,7 +96,7 @@ Window::poll_events(EventListener* listener)
 Window::Window() :
 	m_dt_s{0}
 {
-	m_window.create(sf::VideoMode(1200, 1080), "City");
+	m_window.create(sf::VideoMode(1200, 800), "City");
 	m_window.setFramerateLimit(30);
 	m_background.setTexture(AssetsManager::load(assets::Textures::background));
 	m_font.loadFromFile(AssetsManager::fontTTFFile("Lato", "Regular").string());

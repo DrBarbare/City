@@ -24,11 +24,9 @@ class Editor : public GameState
 	sf::Vector2f m_last_mouse_position;
 	ViewState m_view_state;
 
-	sfg::Button::Ptr m_button;
-	sfg::Label::Ptr m_label;
-	sfg::Box::Ptr m_box;
-	sfg::Window::Ptr m_ui_window;
-	sfg::ListBox::Ptr m_table;
+	std::function<void(Window&, const float dt)> m_draw_ui;
+	std::function<sf::String()> m_getSelectedTileName;
+	Tile getSelectedTile() const;
 
 	sf::Vector2f m_selection_start;
 	sf::Vector2f m_selection_position;
@@ -37,7 +35,6 @@ class Editor : public GameState
 	Tile m_current_tile_type;
 
 	std::tuple<std::size_t, std::size_t, std::size_t, std::size_t> clampSelectionWorld();
-	Tile getSelectedTile();
 
 public:
 	Editor();

@@ -12,35 +12,56 @@ Editor::Editor() :
 	m_view_state{ViewState::none}
 {
 	// Create the label.
-	m_label = sfg::Label::Create("Editor state");
+	auto label = sfg::Label::Create("You are in\nEditor state\nSelect a tile\nand put it down!");
 
 	// Create a simple button and connect the click signal.
-	m_button = sfg::Button::Create("Back to Main menu");
+	auto m_button = sfg::Button::Create("Back to Main menu");
 	m_button->GetSignal(sfg::Widget::OnLeftClick)
-	          .Connect([this]
+	          .Connect([this, label]
 	{
-		m_label->SetText( "Leaving..." );
+		label->SetText( "Leaving..." );
 		m_leaveState = true;
 	});
 
-	// Create a vertical box layouter with 5 pixels spacing and add the label
-	// and button to it.
-	m_box = sfg::Box::Create( sfg::Box::Orientation::VERTICAL, 5.0f );
-	m_box->Pack( m_label );
-	m_box->Pack( m_button, false );
-
-	m_table = sfg::ListBox::Create();
+	auto table = sfg::ListBox::Create();
+	table->AppendItem(sf::String{"Nothing"});
+	table->SetSelection(0);
 	for (auto tile : AssetsManager::tiles())
 	{
-		m_table->AppendItem(sf::String{tile.first});
+		table->AppendItem(sf::String{tile.first});
 	}
-	m_table->AppendItem(sf::String{"Nothing"});
-	m_box->Pack(m_table);
+
+	m_getSelectedTileName = [table]() { return table->GetSelectedItemText(); };
+
+	// Create a vertical box layouter with 5 pixels spacing and add the label
+	// and button to it.
+	auto box = sfg::Box::Create( sfg::Box::Orientation::VERTICAL, 5.0f );
+	box->Pack(table);
+	box->Pack(label);
+	box->Pack(m_button, false);
 
 	// Create a window and add the box layouter to it. Also set the window's title.
-	m_ui_window = sfg::Window::Create();
-	m_ui_window->SetTitle("Menu");
-	m_ui_window->Add(m_box);
+	auto ui_window = sfg::Window::Create(sfg::Window::Style::BACKGROUND);
+	ui_window->SetTitle("Menu");
+	ui_window->Add(box);
+
+	m_draw_ui = [ui_window=std::move(ui_window)](Window& window, const float) {
+		auto window_shape = window.shape();
+		auto allocation = ui_window->GetAllocation();
+
+		if (allocation.left == 0.0f && allocation.top == 0.0f)
+		{
+			auto width = allocation.width * 1.33f;
+			ui_window->SetAllocation(sf::FloatRect{
+				window_shape.x - width,
+				0.0f,
+				width,
+				window_shape.y
+			});
+		}
+
+		window.desktop().Add( ui_window );
+	};
 
 	auto size = m_world.gameDimension();
 	m_view.setCenter(size);
@@ -89,10 +110,10 @@ Editor::selectionCondition()
 }
 
 Tile
-Editor::getSelectedTile()
+Editor::getSelectedTile() const
 {
 	Tile tile;
-	auto tile_iterator = AssetsManager::tiles().find(m_table->GetSelectedItemText());
+	auto tile_iterator = AssetsManager::tiles().find(m_getSelectedTileName());
 	if (tile_iterator != AssetsManager::tiles().cend())
 	{
 		tile = tile_iterator->second;
@@ -104,8 +125,7 @@ void
 Editor::draw(Window& window, const float dt)
 {
 	window.renderer().setView(m_view);
-	// Create a desktop and add the window to it.
-	window.desktop().Add( m_ui_window );
+	m_draw_ui(window, dt);
 	m_world.draw(window, dt, selectionCondition());
 }
 

@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "game_states/Editor.h"
 #include "game_states/Start.h"
 #include "AssetsManager.h"
 
@@ -9,7 +8,7 @@ namespace city
 Game::Game()
 {
 	AssetsManager::loadTiles();
-	switch_to_state<state::Editor>();
+	switch_to_state<state::Start>();
 }
 Game::~Game() = default;
 

@@ -8,10 +8,7 @@ namespace city::state
 class Start : public GameState
 {
 	bool m_startEditor;
-	sfg::Button::Ptr m_button;
-	sfg::Label::Ptr m_label;
-	sfg::Box::Ptr m_box;
-	sfg::Window::Ptr m_ui_window;
+	std::function<void(Window&, const float dt)> m_draw_ui;
 
 public:
 	Start();
