@@ -9,3 +9,7 @@
 **/CMakeFiles/
 .vscode/
 .vs/
+
+# Conan files
+conan*info.*
+graph_info.json

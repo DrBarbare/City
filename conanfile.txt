@@ -1,0 +1,10 @@
+[requires]
+sfml/2.5.0@bincrafters/stable
+yaml-cpp/0.6.2@bincrafters/stable
+
+[options]
+sfml:graphics=True
+sfml:window=True
+
+[generators]
+cmake

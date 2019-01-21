@@ -15,14 +15,17 @@ if (MSVC)
     endif()
 endif()
 
+include(${CMAKE_SOURCE_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
+
 find_package(SFGUI REQUIRED)
-find_package(yaml-cpp REQUIRED)
+
 
 file(GLOB_RECURSE CPPS src/*.cpp)
 add_executable(City ${CPPS})
 
 target_include_directories(City PRIVATE includes)
-target_link_libraries(City PRIVATE SFGUI::SFGUI yaml-cpp)
+target_link_libraries(City PRIVATE SFGUI::SFGUI ${CONAN_LIBS})
 
 if (NOT MSVC)
     target_link_libraries(City PRIVATE stdc++fs)
