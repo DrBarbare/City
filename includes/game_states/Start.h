@@ -8,6 +8,7 @@ namespace city::state
 class Start : public GameState
 {
 	bool m_startEditor;
+	bool m_quit;
 	std::function<void(Window&, const float dt)> m_draw_ui;
 
 public:

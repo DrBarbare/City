@@ -4,7 +4,7 @@
 namespace city::state
 {
 
-Start::Start() : m_startEditor{false}
+Start::Start() : m_startEditor{false}, m_quit{false}
 {
 	// Create the label.
 	auto label  = sfg::Label::Create( "Welcome to City" );
@@ -12,10 +12,17 @@ Start::Start() : m_startEditor{false}
 	// Create a simple button and connect the click signal.
 	auto button = sfg::Button::Create( "Editor" );
 	button->GetSignal(sfg::Widget::OnLeftClick)
-	       .Connect([label, this]
+	       .Connect([this]
 	{
-		label->SetText("Leaving Start...");
 		m_startEditor = true;
+	});
+
+		// Create a simple button and connect the click signal.
+	auto quitButton = sfg::Button::Create( "Quit to Desktop" );
+	quitButton->GetSignal(sfg::Widget::OnLeftClick)
+	       .Connect([this]
+	{
+		m_quit = true;
 	});
 
 	// Create a vertical box layouter with 5 pixels spacing and add the label
@@ -23,6 +30,7 @@ Start::Start() : m_startEditor{false}
 	auto box = sfg::Box::Create( sfg::Box::Orientation::VERTICAL, 5.0f );
 	box->Pack( label );
 	box->Pack( button, false );
+	box->Pack( quitButton, false);
 
 	// Create a window and add the box layouter to it. Also set the window's title.
 	auto ui_window = sfg::Window::Create(sfg::Window::Style::NO_STYLE);
@@ -45,6 +53,11 @@ Start::Start() : m_startEditor{false}
 void
 Start::update(Game& game, const float dt)
 {
+	if (m_quit)
+	{
+		game.back_to_previous_state();
+	}
+
 	if (m_startEditor)
 	{
 		game.back_to_previous_state();
