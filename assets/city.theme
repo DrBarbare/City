@@ -3,7 +3,6 @@
 	BorderWidth: 0.0;
 	BorderColor: #f4dec7ff;
 	FontSize: 16;
-	FontName: fonts/Lato/Lato-Regular.ttf;
 }
 
 Button {
