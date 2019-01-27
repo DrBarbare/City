@@ -73,11 +73,11 @@ World::setRegion(geometry::Point tl, geometry::Point br, const Tile& tile)
 }
 
 void
-World::draw(Window& window, float dt, const point_condition& highlight)
+World::draw(Window& window, float dt, const Tile::drawing_info& info)
 {
 	m_tiles.for_each([&](auto x, auto y, auto& val)
 			{
-				val.draw(window, dt, x, y, highlight(x, y));
+				val.draw(window, dt, x, y, info);
 			});
 }
 

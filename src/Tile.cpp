@@ -1,4 +1,5 @@
 #include "Tile.h"
+#include <iostream>
 
 namespace city
 {
@@ -29,9 +30,12 @@ Tile::tileSize() noexcept
 }
 
 void
-Tile::draw(Window& window, const float dt, std::size_t col, std::size_t row, bool highlight)
+Tile::draw(Window& window, const float dt, std::size_t col, std::size_t row, const drawing_info& info)
 {
-	auto sprite = m_sprite_sheet.next(dt);
+	bool is_drawing = !info.brush.get().empty() && info.is_valid_area(col, row);
+
+	// Grab the bush tile to overlay
+	auto sprite = is_drawing ? info.brush.get().m_sprite_sheet.next(dt) : m_sprite_sheet.next(dt);
 
 	// Transform
 	sprite.scale(scale_factor, scale_factor);
@@ -45,7 +49,7 @@ Tile::draw(Window& window, const float dt, std::size_t col, std::size_t row, boo
 	
 	sprite.setPosition(pos);
 
-	if (highlight)
+	if (info.is_valid_area(col, row))
 	{
 		sprite.setColor(sf::Color(0x7d, 0x7d, 0x7d));
 	}

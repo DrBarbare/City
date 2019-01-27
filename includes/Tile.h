@@ -12,6 +12,13 @@ namespace city
 class Tile
 {
 public:
+	using valid_area_condition = std::function<bool(std::size_t, std::size_t)>;
+
+	struct drawing_info {
+		valid_area_condition is_valid_area;
+		std::reference_wrapper<Tile> brush;
+	};
+
 	using string_property = std::string;
 	using uint_property = std::size_t;
 	using float_property = float;
@@ -44,7 +51,7 @@ public:
 	void spriteSheet(SpriteSheet sheet) noexcept;
 
 	void update(Game& game, const float dt);
-	void draw(Window& window, const float dt, std::size_t col, std::size_t row, bool highlight);
+	void draw(Window& window, const float dt, std::size_t col, std::size_t row, const drawing_info& info);
 
 	bool empty() const noexcept;
 

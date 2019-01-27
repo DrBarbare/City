@@ -14,10 +14,9 @@ namespace city
 class World
 {
 public:
-	using point_condition = std::function<bool(std::size_t, std::size_t)>;
 	World();
 
-	void draw(Window& window, float dt, const point_condition& highlight);
+	void draw(Window& window, float dt, const Tile::drawing_info& highlight);
 	void update(Game& window, float dt);
 
 	sf::Vector2f gameDimension() const;

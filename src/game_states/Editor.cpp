@@ -90,7 +90,7 @@ Editor::clampSelectionWorld()
 	return std::make_tuple(x0, y0, x1, y1);
 }
 
-World::point_condition
+Tile::valid_area_condition
 Editor::selectionCondition()
 {
 	if (m_view_state == ViewState::select
@@ -126,7 +126,8 @@ Editor::draw(Window& window, const float dt)
 {
 	window.renderer().setView(m_view);
 	m_draw_ui(window, dt);
-	m_world.draw(window, dt, selectionCondition());
+	auto tile = getSelectedTile();
+	m_world.draw(window, dt, {selectionCondition(), tile});
 }
 
 void

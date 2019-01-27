@@ -30,9 +30,7 @@ class Editor : public GameState
 
 	sf::Vector2f m_selection_start;
 	sf::Vector2f m_selection_position;
-	World::point_condition selectionCondition();
-
-	Tile m_current_tile_type;
+	Tile::valid_area_condition selectionCondition();
 
 	std::tuple<std::size_t, std::size_t, std::size_t, std::size_t> clampSelectionWorld();
 
