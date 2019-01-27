@@ -42,7 +42,7 @@ Tile::draw(Window& window, const float dt, std::size_t col, std::size_t row, con
 	pos.x = (col - row) * tile_size + 10 * tile_size;
 	pos.y = (col + row) * tile_size * 0.5
             - distance_from_base * tile_size; // Shift tiles that are greater than the base tile, think skyscrapers.
-	
+
 	sprite.setPosition(pos);
 
 	if (info.is_valid_area(col, row))

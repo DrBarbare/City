@@ -24,8 +24,8 @@ SpriteSheet::next(float dt_s)
 	{
 		auto rect = m_initial_frame;
 		auto frame_number = m_animations[m_current_animation].getOffset(dt_s);
-		rect.left = rect.width * frame_number;
-		rect.top = rect.height * m_current_animation;
+		rect.left += rect.width * frame_number;
+		rect.top += rect.height * m_current_animation;
 		m_sprite.setTexture(m_texture);
 		m_sprite.setTextureRect(rect);
 	}
