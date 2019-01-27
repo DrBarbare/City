@@ -21,8 +21,6 @@ public:
 		cost,
 		population,
 		max_population,
-		level,
-		max_levels,
 		production,
 		storage,
 		unknown // Leave at the end to remember the size of the enum
@@ -33,11 +31,14 @@ public:
 
 	static float tileSize() noexcept;
 
+	Tile();
+
+	Property get_property(Properties prop) const;
 	template<typename T>
-	const auto& property(Properties prop) const { return std::get<T>(m_properties.at(prop)); }
+	auto property(Properties prop) const { return std::get<T>(get_property(prop)); }
 
 	const auto& name() const { return property<string_property>(Properties::name); }
-
+	const auto& level() const noexcept { return m_current_level; }
 
 	void property(Properties prop, Property val) noexcept;
 	void spriteSheet(SpriteSheet sheet) noexcept;
@@ -47,9 +48,11 @@ public:
 
 	bool empty() const noexcept;
 
-private:
+	void addLevel();
 
-	std::unordered_map<Properties, Property> m_properties;
+private:
+	std::size_t m_current_level;
+	std::vector<std::unordered_map<Properties, Property>> m_properties;
 	SpriteSheet m_sprite_sheet;
 
 };

@@ -76,24 +76,6 @@ std::unordered_map<std::string, Tile>
 AssetsManager::m_tiles;
 
 void
-fillTileProperties(const YAML::Node& node, Tile& tile)
-{
-	if (node.IsSequence())
-	{
-		// TODO: Handle levels
-	}
-	else
-	{
-		for (const auto& config_prop : node)
-		{
-			auto prop = Tile::propertyFromName(config_prop.first.as<std::string>());
-			auto val  = config_prop.second.as<std::size_t>();
-			tile.property(prop, val);
-		}
-	}
-}
-
-void
 loadTileAnimation(const YAML::Node& node, Tile& tile)
 {
 	if (node && node.IsMap())
@@ -113,6 +95,30 @@ loadTileAnimation(const YAML::Node& node, Tile& tile)
 		}
 
 		tile.spriteSheet(std::move(sheet));
+	}
+}
+
+void
+fillTileProperties(const YAML::Node& node, Tile& tile)
+{
+	auto levels = node["levels"];
+	if (levels)
+	{
+		std::cerr << levels.size() << std::endl;
+		for (const auto& level : levels)
+		{
+			fillTileProperties(levels[0], tile);
+			tile.addLevel();
+		}
+	}
+	else
+	{
+		for (const auto& config_prop : node)
+		{
+			auto prop = Tile::propertyFromName(config_prop.first.as<std::string>());
+			auto val  = config_prop.second.as<std::size_t>();
+			tile.property(prop, val);
+		}
 	}
 }
 

@@ -3,6 +3,8 @@
 namespace city
 {
 
+Tile::Tile() : m_current_level{0u} {}
+
 void
 Tile::spriteSheet(SpriteSheet sheet) noexcept
 {
@@ -55,6 +57,12 @@ Tile::draw(Window& window, const float dt, std::size_t col, std::size_t row, boo
 	window.renderer().draw(std::move(sprite));
 }
 
+void
+Tile::addLevel()
+{
+	m_properties.emplace_back();
+}
+
 /*******************************************************/
 /*********  Properties utilities             ***********/
 /*******************************************************/
@@ -66,8 +74,6 @@ static const std::unordered_map<Tile::Properties, std::string_view> properties_n
 	{ Tile::Properties::cost,           "cost"},
 	{ Tile::Properties::population,     "population"},
 	{ Tile::Properties::max_population, "max_population"},
-	{ Tile::Properties::level,          "level"},
-	{ Tile::Properties::max_levels,     "max_levels"},
 	{ Tile::Properties::production,     "production"},
 	{ Tile::Properties::storage,        "storage"},
 	{ Tile::Properties::unknown,        "unknown"}
@@ -116,7 +122,26 @@ Tile::propertyToName(Tile::Properties prop)
 void
 Tile::property(Properties prop, Property val) noexcept
 {
-	m_properties[prop] = std::move(val);
+	if (m_properties.empty()) addLevel();
+	m_properties[m_current_level][prop] = std::move(val);
+}
+
+Tile::Property
+Tile::get_property(Properties prop) const
+{
+	Property property;
+	// Look for a property across all previous levels, properties are hereditary
+	for (auto level = m_current_level; level >= 0 && level < m_properties.size(); --level)
+	{
+		auto&& level_prop = m_properties[level];
+		auto it = level_prop.find(prop);
+		if (it != level_prop.cend())
+		{
+			property = it->second;
+			break;
+		}
+	}
+	return property;
 }
 
 bool
@@ -124,6 +149,7 @@ Tile::empty() const noexcept
 {
 	return m_properties.empty();
 }
+
 } // namespace city
 
 
