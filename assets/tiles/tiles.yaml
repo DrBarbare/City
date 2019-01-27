@@ -54,12 +54,12 @@ commercial:
       production: 0
       storage: 0
   animations:
-    frame_shape: *DEFAULT_FRAME
+    frame_shape: &DOUBLE_HEIGHT_FRAME [0, 0, 16, 16]
     rows:
         - { offset: 0, frames: 1, duration: 1.0 }
         - { offset: 0, frames: 1, duration: 1.0 }
         - { offset: 0, frames: 1, duration: 1.0 }
-        - { offset: 0, frames: 1, duration: 1.0 }        
+        - { offset: 0, frames: 1, duration: 1.0 }      
 
 industrial:
   properties:
@@ -69,7 +69,7 @@ industrial:
     production: 0
     storage: 0
   animations:
-    frame_shape: *DEFAULT_FRAME
+    frame_shape: *DOUBLE_HEIGHT_FRAME
     rows:
         - { offset: 0, frames: 1, duration: 1.0 }
 
@@ -81,7 +81,7 @@ residential:
     production: 0
     storage: 0
   animations:
-    frame_shape: *DEFAULT_FRAME
+    frame_shape: *DOUBLE_HEIGHT_FRAME
     rows:
         - { offset: 0, frames: 1, duration: 1.0 }
 ---

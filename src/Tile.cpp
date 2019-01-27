@@ -18,10 +18,7 @@ Tile::update(Game& game, const float dt)
 {
 }
 
-constexpr std::size_t Xoffset = 0;
-constexpr std::size_t Yoffset = 0;
-constexpr float scale_factor = 1.0f;
-constexpr std::size_t tile_size = 8 * scale_factor; // Smaller size of a 1x1 tile, isometry makes it a bit complex...
+constexpr std::size_t tile_size = 8; // Smaller size of a 1x1 tile, isometry makes it a bit complex...
 
 float
 Tile::tileSize() noexcept
@@ -37,15 +34,14 @@ Tile::draw(Window& window, const float dt, std::size_t col, std::size_t row, con
 	// Grab the bush tile to overlay
 	auto sprite = is_drawing ? info.brush.get().m_sprite_sheet.next(dt) : m_sprite_sheet.next(dt);
 
-	// Transform
-	sprite.scale(scale_factor, scale_factor);
+	// Compute the number of tiles occupied by this one in height.
+	auto distance_from_base = (sprite.getLocalBounds().height / tile_size) - 1;
 
-	// Then move with respect to the transormation
-	auto rect = sprite.getGlobalBounds();
-
+	// Transform: move into isometric space.
 	sf::Vector2f pos;
-	pos.x = (col - row) * tile_size + 10 * tile_size + Xoffset;
-	pos.y = (col + row) * tile_size * 0.5 + Yoffset;
+	pos.x = (col - row) * tile_size + 10 * tile_size;
+	pos.y = (col + row) * tile_size * 0.5
+            - distance_from_base * tile_size; // Shift tiles that are greater than the base tile, think skyscrapers.
 	
 	sprite.setPosition(pos);
 

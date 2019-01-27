@@ -5,7 +5,7 @@ namespace city
 {
 
 SpriteSheet::SpriteSheet(const std::filesystem::path& file,
-             sf::IntRect initial_frame) :
+                         sf::IntRect initial_frame) :
 	m_current_animation{0},
 	m_initial_frame{std::move(initial_frame)}
 {
