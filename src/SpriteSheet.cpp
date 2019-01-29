@@ -38,9 +38,16 @@ SpriteSheet::current_sprite() const
 	return m_sprite;
 }
 
-void
-SpriteSheet::next_animation()
+std::size_t
+SpriteSheet::get_animation() const
 {
-	m_current_animation = ++m_current_animation % m_animations.size();
+	return m_current_animation;
+}
+
+void
+SpriteSheet::set_animation(std::size_t animation)
+{
+	if (animation >= m_animations.size()) throw std::out_of_range("Animation queried does not exist.");
+	m_current_animation = animation;
 }
 }

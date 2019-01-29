@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <cstddef>
 #include <filesystem>
 #include <vector>
 
@@ -35,8 +36,10 @@ public:
 	{
 		m_animations.emplace_back(std::forward<Args>(args)...);
 	}
-};
 
+	std::size_t get_animation() const;
+	void set_animation(std::size_t animation);
+};
 }
 
 #endif // CITY_GAME_SPRITESHEET_H
