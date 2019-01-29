@@ -48,8 +48,8 @@ public:
 	template<typename T>
 	auto property(Properties prop) const { return std::get<T>(get_property(prop)); }
 
-	const auto& name() const { return property<string_property>(Properties::name); }
-	const auto& level() const noexcept { return m_current_level; }
+	auto name() const { return property<string_property>(Properties::name); }
+	auto level() const noexcept { return m_current_level; }
 
 	void property(Properties prop, Property val) noexcept;
 	void spriteSheet(SpriteSheet sheet) noexcept;
