@@ -81,6 +81,15 @@ World::setRegion(geometry::Point tl, geometry::Point br, const Tile& tile)
 			m_tiles.at(col, row) = tile;
 		}
 	}
+
+	// Need a second pass to trigger the tile region changes as needed
+	for (std::size_t row = tl.y(); row <= br.y(); row++)
+	{
+		for (std::size_t col = tl.x(); col <= br.x(); col++)
+		{
+			m_tiles.at(col, row).update_region(neighbor_info_getter({col, row}));
+		}
+	}
 }
 
 void

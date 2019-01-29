@@ -56,6 +56,9 @@ public:
 
 	void update(Game& game, const float dt, const neighbor_info& neighbor);
 
+	/// Update a Tile according to its neighbors
+	void update_region(const neighbor_info& get_neighbor);
+
 	void draw(Window& window, const float dt, std::size_t col, std::size_t row, const drawing_info& info);
 
 	bool empty() const noexcept;
