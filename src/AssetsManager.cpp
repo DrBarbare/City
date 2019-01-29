@@ -83,7 +83,7 @@ loadTileAnimation(const YAML::Node& node, Tile& tile)
 		const auto& name = tile.property<Tile::string_property>(Tile::Properties::name);
 		auto file = (tiles_dir / name).replace_extension(".png");
 
-		std::cout << "Getting image: " << file << std::endl;
+		std::cerr << "Getting image: " << file << std::endl;
 
 		SpriteSheet sheet(file, node["frame_shape"].as<sf::IntRect>());
 
@@ -104,7 +104,6 @@ fillTileProperties(const YAML::Node& node, Tile& tile)
 	auto levels = node["levels"];
 	if (levels)
 	{
-		std::cerr << levels.size() << std::endl;
 		for (const auto& level : levels)
 		{
 			fillTileProperties(levels[0], tile);
@@ -139,7 +138,7 @@ createTiles(const YAML::Node& node)
 		}
 		else
 		{
-			std::cerr << "Already in\n";
+			std::cerr << "Already in" << std::endl;
 		}
 	}
 	return tiles;
@@ -152,7 +151,7 @@ AssetsManager::loadTiles()
 	m_tiles = createTiles(nodes);
 	for (const auto& tile : m_tiles)
 	{
-		std::cout << "Tiles:" << tile.first << std::endl;
+		std::cerr << "Tiles:" << tile.first << std::endl;
 	}
 	std::cerr << m_tiles.size() << " tiles Loaded." << std::endl;
 }
