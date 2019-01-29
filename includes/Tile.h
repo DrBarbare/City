@@ -1,6 +1,7 @@
 #ifndef CITY_GAME_TILE_H
 #define CITY_GAME_TILE_H
 
+#include <functional>
 #include <unordered_map>
 #include <variant>
 
@@ -12,6 +13,9 @@ namespace city
 class Tile
 {
 public:
+	/// Neighbor info gets a tile from the world at given coordinates (empty if doesn't exsit)
+	using neighbor_info = std::function<Tile*(int, int)>;
+
 	using valid_area_condition = std::function<bool(std::size_t, std::size_t)>;
 
 	struct drawing_info {
@@ -50,7 +54,8 @@ public:
 	void property(Properties prop, Property val) noexcept;
 	void spriteSheet(SpriteSheet sheet) noexcept;
 
-	void update(Game& game, const float dt);
+	void update(Game& game, const float dt, const neighbor_info& neighbor);
+
 	void draw(Window& window, const float dt, std::size_t col, std::size_t row, const drawing_info& info);
 
 	bool empty() const noexcept;

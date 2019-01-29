@@ -17,7 +17,7 @@ public:
 	World();
 
 	void draw(Window& window, float dt, const Tile::drawing_info& highlight);
-	void update(Game& window, float dt);
+	void update(Game& game, float dt);
 
 	sf::Vector2f gameDimension() const;
 
@@ -41,6 +41,8 @@ private:
 
 	algorithms::Matrix<Tile> m_tiles;
 	mutable algorithms::FloodFill<Tile> m_floodFill;
+
+	auto neighbor_info_getter(geometry::Point pt);
 };
 
 } // namespace city

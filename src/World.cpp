@@ -58,6 +58,17 @@ World::size() const
 	return m_tiles.area();
 }
 
+auto
+World::neighbor_info_getter(geometry::Point pt)
+{
+	return [pt=std::move(pt), this](int qx, int qy) -> Tile* {
+				std::size_t coordx = int(pt.x()) + qx;
+				std::size_t coordy = int(pt.y()) + qy;
+				if (coordx < width() && coordy < height()) return &m_tiles.at(coordx, coordy);
+				else                                       return nullptr;
+			};
+}
+
 void
 World::setRegion(geometry::Point tl, geometry::Point br, const Tile& tile)
 {
@@ -79,6 +90,15 @@ World::draw(Window& window, float dt, const Tile::drawing_info& info)
 			{
 				val.draw(window, dt, x, y, info);
 			});
+}
+
+void
+World::update(Game& game, float dt)
+{
+	m_tiles.for_each([&game, dt, this](auto x, auto y, auto& val)
+		{
+			val.update(game, dt, neighbor_info_getter({x, y}));
+		});
 }
 
 sf::Vector2f

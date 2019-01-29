@@ -75,6 +75,10 @@ Editor::update(Game& game, const float dt)
 		game.back_to_previous_state();
 		game.switch_to_state<Start>();
 	}
+	else
+	{
+		m_world.update(game, dt);
+	}
 }
 
 std::tuple<std::size_t, std::size_t, std::size_t, std::size_t>

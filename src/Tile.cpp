@@ -14,8 +14,9 @@ Tile::spriteSheet(SpriteSheet sheet) noexcept
 
 
 void
-Tile::update(Game& game, const float dt)
+Tile::update(Game& game, const float dt, const neighbor_info& get_neighbor)
 {
+	// TODO: Upgrade tiles
 }
 
 constexpr std::size_t tile_size = 8; // Smaller size of a 1x1 tile, isometry makes it a bit complex...
