@@ -1,5 +1,9 @@
-#include "Tile.h"
 #include <array>
+#include <random>
+#include <iostream>
+
+#include "Tile.h"
+
 
 namespace
 {
@@ -67,7 +71,7 @@ get_neighbor_mask(const city::Tile::neighbor_info& get_neighbor, const char* til
 namespace city
 {
 
-Tile::Tile() : m_current_level{0u} {}
+Tile::Tile() : m_timeAccumulator{0.0f}, m_current_level{0u} {}
 
 void
 Tile::spriteSheet(SpriteSheet sheet) noexcept
@@ -78,15 +82,38 @@ Tile::spriteSheet(SpriteSheet sheet) noexcept
 void
 Tile::update_region(const neighbor_info& get_neighbor)
 {
-	auto neighbors = get_neighbor_mask(get_neighbor, name().c_str());
+	if (name() == "road")
+	{
+	auto neighbors = get_neighbor_mask(get_neighbor, "road");
 	auto animation = get_road_sprite_index(neighbors);
 	m_sprite_sheet.set_animation(animation);
+	}
 }
 
 void
 Tile::update(Game& game, const float dt, const neighbor_info& get_neighbor)
 {
+	static auto rng = std::default_random_engine();
+	static std::uniform_int_distribution<> dist{0, 100};
+	m_timeAccumulator += dt;
 	// TODO: Upgrade tiles
+	if (hasLevels() && dist(rng) > 80 && m_timeAccumulator > 1.0f)
+	{
+		m_timeAccumulator = 0.0f;
+
+		// Increase population
+		auto max        = property<uint_property>(Properties::max_population);
+		auto population = std::min(property<uint_property>(Properties::population) + 1, max);
+
+		property(Properties::population, population);
+
+		// Increase level if max population reached
+		if (population >= max)
+		{
+			auto new_level = std::min(m_current_level+1, m_properties.size()-1);
+			setLevel(new_level);
+		}
+	}
 }
 
 constexpr std::size_t tile_size = 8; // Smaller size of a 1x1 tile, isometry makes it a bit complex...
@@ -129,9 +156,23 @@ Tile::draw(Window& window, const float dt, std::size_t col, std::size_t row, con
 }
 
 void
+Tile::setLevel(std::size_t level)
+{
+	m_current_level = level;
+	m_sprite_sheet.set_animation(level);
+}
+
+std::size_t
 Tile::addLevel()
 {
 	m_properties.emplace_back();
+	return m_properties.size() - 1;
+}
+
+bool
+Tile::hasLevels() const noexcept
+{
+	return m_properties.size() > 1;
 }
 
 /*******************************************************/
@@ -144,7 +185,7 @@ static const std::unordered_map<Tile::Properties, std::string_view> properties_n
 	{ Tile::Properties::name,           "name"},
 	{ Tile::Properties::cost,           "cost"},
 	{ Tile::Properties::population,     "population"},
-	{ Tile::Properties::max_population, "max_population"},
+	{ Tile::Properties::max_population, "maximum_population"},
 	{ Tile::Properties::production,     "production"},
 	{ Tile::Properties::storage,        "storage"},
 	{ Tile::Properties::unknown,        "unknown"}

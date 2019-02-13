@@ -104,11 +104,19 @@ fillTileProperties(const YAML::Node& node, Tile& tile)
 	auto levels = node["levels"];
 	if (levels)
 	{
+		auto lvl = 1;
 		for (const auto& level : levels)
 		{
-			fillTileProperties(levels[0], tile);
-			tile.addLevel();
+			fillTileProperties(level, tile);
+
+			// This sets the memory for the _next_ level
+			if (lvl++ < levels.size())
+			{
+				tile.setLevel(tile.addLevel());
+			}
 		}
+		// Reset level
+		tile.setLevel(0u);
 	}
 	else
 	{
@@ -133,8 +141,8 @@ createTiles(const YAML::Node& node)
 		{
 			auto& tile = p.first->second;
 			tile.property(Tile::Properties::name, name);
-			fillTileProperties(element.second["properties"], tile);
 			loadTileAnimation(element.second["animations"], tile);
+			fillTileProperties(element.second["properties"], tile);
 		}
 		else
 		{

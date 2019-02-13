@@ -46,7 +46,18 @@ public:
 
 	Property get_property(Properties prop) const;
 	template<typename T>
-	auto property(Properties prop) const { return std::get<T>(get_property(prop)); }
+	auto property(Properties prop) const
+	{
+		auto&& variant = get_property(prop);
+		if (std::holds_alternative<T>(variant))
+		{
+			return std::get<T>(variant);
+		}
+		else
+		{
+			return T{};
+		}
+	}
 
 	auto name() const { return property<string_property>(Properties::name); }
 	auto level() const noexcept { return m_current_level; }
@@ -63,9 +74,15 @@ public:
 
 	bool empty() const noexcept;
 
-	void addLevel();
+	// Set the current tile level
+	void setLevel(std::size_t level);
+	
+	// Create a new tile level, return its number
+	std::size_t addLevel();
+	bool hasLevels() const noexcept;
 
 private:
+	float m_timeAccumulator;
 	std::size_t m_current_level;
 	std::vector<std::unordered_map<Properties, Property>> m_properties;
 	SpriteSheet m_sprite_sheet;

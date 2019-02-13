@@ -52,17 +52,17 @@ commercial:
       production: 0
       storage: 0
     -
-      maximum_population: 0
-      production: 0
-      storage: 0
+      maximum_population: 25
+      production: 25
+      storage: 25
     -
-      maximum_population: 0
-      production: 0
-      storage: 0
+      maximum_population: 50
+      production: 50
+      storage: 50
     -
-      maximum_population: 0
-      production: 0
-      storage: 0
+      maximum_population: 100
+      production: 100
+      storage: 100
   animations:
     frame_shape: *DOUBLE_HEIGHT_FRAME
     rows:
@@ -73,25 +73,67 @@ commercial:
 
 industrial:
   properties:
-    cost: 200
-    maximum_level: 0
-    growth_factor: 0
-    production: 0
-    storage: 0
+    levels:
+    -
+      cost: 200
+      maximum_population: 0
+      production: 0
+      storage: 0
+    -
+      maximum_population: 25
+      production: 25
+      storage: 25
+    -
+      maximum_population: 50
+      production: 50
+      storage: 50
+    -
+      maximum_population: 100
+      production: 100
+      storage: 100
   animations:
     frame_shape: *DOUBLE_HEIGHT_FRAME
     rows:
         - { offset: 0, frames: 1, duration: 1.0 }
+        - { offset: 0, frames: 1, duration: 1.0 }
+        - { offset: 0, frames: 1, duration: 1.0 }
+        - { offset: 0, frames: 1, duration: 1.0 }
 
 residential:
   properties:
-    cost: 0
-    maximum_level: 0
-    growth_factor: 0
-    production: 0
-    storage: 0
+    levels:
+    -
+      cost: 200
+      maximum_population: 0
+      production: 0
+      storage: 0
+    -
+      maximum_population: 25
+      production: 25
+      storage: 25
+    -
+      maximum_population: 50
+      production: 50
+      storage: 50
+    -
+      maximum_population: 100
+      production: 100
+      storage: 100
+    -
+      maximum_population: 200
+      production: 200
+      storage: 200
+    -
+      maximum_population: 400
+      production: 400
+      storage: 400
   animations:
     frame_shape: *DOUBLE_HEIGHT_FRAME
     rows:
+        - { offset: 0, frames: 1, duration: 1.0 }
+        - { offset: 0, frames: 1, duration: 1.0 }
+        - { offset: 0, frames: 1, duration: 1.0 }
+        - { offset: 0, frames: 1, duration: 1.0 }
+        - { offset: 0, frames: 1, duration: 1.0 }
         - { offset: 0, frames: 1, duration: 1.0 }
 ---
