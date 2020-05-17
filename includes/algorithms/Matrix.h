@@ -26,7 +26,7 @@ public:
 
 	void fill(size_type width, size_type height, T value)
 	{
-		m_size = Size{width, height};
+		m_size = geometry::Size{width, height};
 		m_data = std::vector<value_type>(m_size.area(), std::move(value));
 	}
 

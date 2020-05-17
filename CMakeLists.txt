@@ -6,9 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+option(SFML_STATIC_LIBRARIES "Build with SFML static libraries" ON)
 if (MSVC)
-    option(SFML_STATIC_LIBRARIES "Build with SFML static libraries" ON)
-
     option(CITY_WINDOWS_NO_CONSOLE "Configure build to not see a CMD console when launching game." OFF)
     if(CITY_WINDOWS_NO_CONSOLE)
         set(WIN32 WIN32) # add this flag to add_executable to remove console
